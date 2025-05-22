@@ -20,9 +20,11 @@ Confidence Interval along with probability:
 
 ## Assignment 4 
 NULL hypothesis:
+
 ![image](https://github.com/user-attachments/assets/9a09711b-b5cf-454c-9ea2-884abc490d9d)
 
 Bootstrap sampling:
+
 ![image](https://github.com/user-attachments/assets/a32dd577-921c-4418-978e-4e80799c8da8)
 
 
