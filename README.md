@@ -1,6 +1,6 @@
 # Statistics with R
 
-This work contains a total of 4 assignments, 11 laboratories, and 1 project. There is also a full personally created package with statistics and plotting functions that can be installed into R Studio. Follow the link below to download the package created within this course:
+This work contains a total of 4 assignments, 11 laboratories, and 1 project. There is also a full personally created package with statistics, data handling, and plotting functions that can be installed into R Studio. Follow the link below to download the package created within this course:
 
 [MATH4753EvanB](https://github.com/evan-a-blosser-1/MATH4753EvanB)
 
