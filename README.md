@@ -1,6 +1,10 @@
 # Statistics with R
 
-This work contains a total of 4 assignments, 11 laboratories, and 1 project. 
+This work contains a total of 4 assignments, 11 laboratories, and 1 project. There is also a full personally created package with statistics and plotting functions that can be installed into R Studio. Follow the link below to download the package created within this course:
+
+[MATH4753EvanB](https://github.com/evan-a-blosser-1/MATH4753EvanB)
+
+*This can be loaded into R Studio to utilize all functions created, and has built in documentation!*
 
 ## Assignment 1
 This delved into handling collected data for various species of river fish, Earthquake data, and other data sets in R:
