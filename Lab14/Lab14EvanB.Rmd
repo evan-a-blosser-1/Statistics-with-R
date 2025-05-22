@@ -1,0 +1,226 @@
+---
+title: 'Lab 14'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Task 1
+```{r}
+getwd()
+```
+
+
+
+# Task 2
+
+## *mylsq()*
+```{r}
+mylsq=function(x,y){
+ssxx=sum((x-mean(x))^2 )
+ssxy=sum((x-mean(x))*(y-mean(y))) ## fill in the missing portion
+b1hat=ssxy/ssxx
+b0hat=  mean(y)-b1hat*mean(x)   #  fill in the missing portion
+return(list(b0hat=b0hat,b1hat= b1hat)) #fill in the missing portion
+}
+
+```
+
+
+## Running 
+```{r}
+x=1:20
+set.seed(29)
+y=4+6*x + rnorm(20,0,5) 
+T2<- mylsq(x,y)
+plot(x,y)
+abline(coef = c(T2$b0hat,T2$b1hat),lwd=2,col="blue")
+
+```
+
+
+## Checking with lm()
+As can be seen our coefficients were calculated correctly:
+```{r}
+slr=lm(y~x)
+summary(slr)
+```
+
+
+
+
+
+
+
+# Task 3
+
+
+## *mypreditc()*
+
+```{r}
+mypred=function(x,b0,b1){
+ym=b0+ b1*x
+ym
+}
+```
+
+
+## Data from Task 2
+
+### Reload Data
+```{r}
+x=1:20
+set.seed(29)
+y=4+6*x + rnorm(20,0,5) 
+mylsq(x,y)
+```
+### Prediction
+For $xnew = 15.5$, the prediction was found to be $ym =98.12864$. 
+```{r}
+xnew<- 15.5
+mypred(xnew,3.102214,6.130737)
+```
+### Plot
+```{r}
+plot(x,y)
+abline(coef = c(T2$b0hat,T2$b1hat),lwd=2,col="blue")+points(x=15.5,y=98.12864, pch = 21, bg = "green")
+```
+
+
+## OJUICE
+
+### A
+
+```{r}
+ojuice <- read.csv(file = "OJUICE.csv")
+head(ojuice)
+T3<-mylsq(x = ojuice$Pectin, y=ojuice$SweetIndex)
+plot(ojuice$Pectin,ojuice$SweetIndex,xlab = "Pectin",ylab = "Sweetness Index")
+abline(coef = c(T3$b0hat,T3$b1hat),lwd=2,col="blue")
+```
+
+
+### B
+The $\hat{\beta_0}$ is the *y* intercept or in this case it it the maximum **sweetness index** and the lowest **pectin** level of the data set. The $\hat{\beta_1}$ is how the **sweetness index** decreases with the increase in  **pectin**.
+
+
+### C
+The **sweetness index** for when the **pectin** in orange juice is $300ppm$ is roughly $5.55888$
+
+```{r}
+mypred(x = 300,b0 = T3$b0hat,b1 = T3$b1hat)
+```
+
+
+
+## DRILLROCK
+
+
+### A
+
+```{r}
+rock <- read.csv(file = "DRILLROCK.csv")
+head(rock)
+plot(x = rock$DEPTH,y=rock$TIME,xlab = "Drilling Depth",ylab = "Time to Drill 5 ft.")
+```
+
+
+
+### B
+finding coefficients:
+```{r}
+T3B<-mylsq(x = rock$DEPTH,y=rock$TIME)
+T3B
+```
+
+
+Thus the equation is as follows:
+$$
+\begin{align*}
+y = 4.789603 + 0.01438785\cdot x
+\end{align*}
+$$
+
+
+### C
+```{r}
+plot(x = rock$DEPTH,y=rock$TIME,xlab = "Drilling Depth",ylab = "Time to Drill 5 ft.")
+abline(coef = c(T3B$b0hat,T3B$b1hat),lwd=2,col="blue")
+```
+
+
+
+### D
+The $\hat{\beta_0}$, or the intercept, Shows the **drilling time** at the shallowest depth. While $\hat{\beta_1}$ shows the increase in **drilling time** as the **drilling depth** increases.
+
+
+# Task 4
+
+## *mysq()*
+```{r}
+mysq=function(x,y){
+n=length(x)
+ssxx=sum((x-mean(x))^2 )
+ssxy=sum((x-mean(x))*(y-mean(y))) 
+b1hat=ssxy/ssxx
+b0hat=  mean(y)-b1hat*mean(x) 
+yhat=b0hat+ b1hat*x 
+ssr=sum((y-yhat)^2) 
+sq= ssr/(n-2)
+return(list(ssr=ssr,sq=sq))
+}
+```
+
+
+## Carbon
+
+
+### A
+
+```{r}
+carbon <- read.csv("CARBON.csv")
+head(carbon)
+plot(carbon$LabFurnace,carbon$PilotPlant)
+```
+
+
+### B
+```{r}
+T4<-mylsq(x = carbon$LabFurnace,y=carbon$PilotPlant)
+plot(x = carbon$LabFurnace,y=carbon$PilotPlant,xlab = "lab furnace",ylab = "Pilot Plant")
+abline(coef = c(T4$b0hat,T4$b1hat),lwd=2,col="blue")
+```
+
+
+
+### C
+As can be seen below $SSE= 4.694591$ & $S^2=0.2041127$:
+```{r}
+T4C<-mysq(x= carbon$LabFurnace,y=carbon$PilotPlant )
+T4C
+```
+
+
+
+### D
+
+As can be seen from the calculations below, $s=0.4517883$, which is the standard deviation of the error $\epsilon$, and shows how close the observed *y* values lie compared to the predicted values. In this case the values fall below **1 standard deviation** which shows that the fit and prediction is accurate.   
+```{r}
+s<-sqrt(T4C$sq)
+s
+```
+
+

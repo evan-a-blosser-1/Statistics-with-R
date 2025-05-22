@@ -1,0 +1,114 @@
+---
+title: 'Lab 15'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Task 1
+```{r}
+getwd()
+```
+
+
+
+# Task 2: *SEEDGERM*
+
+```{r}
+seed<- read.csv(file = "SEEDGERM.csv")
+head(seed)
+```
+
+
+
+## A
+```{r}
+plot(seed$TEMP,seed$CHANGE)
+```
+
+
+
+
+## B
+```{r}
+mylsq=function(x,y){
+ssxx=sum((x-mean(x))^2 )
+ssxy=sum((x-mean(x))*(y-mean(y))) ## fill in the missing portion
+b1hat=ssxy/ssxx
+b0hat=  mean(y)-b1hat*mean(x)   #  fill in the missing portion
+return(list(b0hat=b0hat,b1hat= b1hat)) #fill in the missing portion
+}
+coeff<- mylsq(x = seed$TEMP,y = seed$CHANGE)
+seed.lm<- lm(seed)
+summary(seed.lm)
+```
+
+
+The equation is as follows:
+$$
+\begin{align*}
+y = 78.5160  -0.2388757 \cdot x
+\end{align*}
+$$
+
+
+## C
+
+
+
+```{r}
+plot(seed$TEMP,seed$CHANGE)
+abline(coef = c(coeff$b0hat,coeff$b1hat),lwd=2,col="blue")
+```
+
+
+
+## D
+```{r}
+MATH4753EvanB::alpha.ci(sample = seed$CHANGE,per = .99)
+```
+
+
+
+
+## E
+
+
+There are several outliers that can be seen in the graph above.
+
+
+
+## F
+
+Use cooks plot? Lab 9
+
+```{r}
+plot(CHANGE~TEMP,data=seed[-5,],col="Blue",pch=19,main="Change Vs Temp with 5th point removed")
+with(seed,text(TEMP,CHANGE,1:7,pos=1))
+seed.lm2=with(seed[-5,],lm(CHANGE~TEMP))
+abline(seed.lm2)
+summary(seed.lm2)
+names(seed.lm2)
+coef=seed.lm2$coef
+coef
+
+```
+
+
+
+
+
+
