@@ -1,0 +1,147 @@
+---
+title: "Lab1_Evan_A_Blosser"
+author: "Evan Blosser"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Tasks
+
+## Task 1
+
+```{r}
+getwd()
+```
+
+## Task 2
+
+```{r}
+ddt <- read.csv(file = "DDT.csv")
+head(ddt)
+```
+
+## Task 3
+
+The qualitative variables are **RIVER** and **SPECIES**
+
+The quantitative variables are **MILE**, **LENGTH**, **WEIGHT**, and **DDT**
+
+There are 3 Types of **SPECIES**: LMBASS, CCATFISH, SMBUFFALO with a total of 144
+```{r}
+# Set SpeciesTab as the Species Table 
+SpeciesTab <- table(ddt$SPECIES)     
+barplot(SpeciesTab, col = rainbow(3))      
+```
+```{r}
+# Call for Data Summary 
+summary(ddt)            
+```
+
+
+```{r}
+SpeciesSubLMB=with(ddt, ddt[WEIGHT>800 & SPECIES=="LMBASS",])
+SpeciesSubLMB
+```
+```{r}
+SpeciesSubRiver=with(ddt, ddt[DDT>4.0 & RIVER=="SCM",])
+SpeciesSubRiver
+```
+
+
+
+### Clicker Questions
+
+### Question 1
+From the Summary in Task 3, the mean **LENGTH** of fish is 42.81
+ 
+### Question 2
+```{r}
+Weight <- ddt$WEIGHT
+sd(Weight)
+```
+The Standard deviation of the weight of fish within the ddt data frame is:
+  376.5461 grams
+  
+### Question 3
+This is not the correct graph as the Y & X axis are labled wrong as can be seen from the correct graph below
+```{r}
+#Use the data option
+plot(WEIGHT~LENGTH,data=ddt)
+```
+
+### Question 4 
+As can be seen below the last value of v/20 is **1.00**
+```{r}
+v = 1:20
+v/20
+```
+
+
+
+
+## Task 4
+```{r}
+# Set SpeciesTab as the Species Table 
+RiversTab=with(ddt,table(RIVER))     
+RiversTab                           
+# Create Barplot                   
+barplot(RiversTab, col = rainbow(4))     
+# Set table of Rivers Crossed w/ Species  
+RiverXFish=with(ddt,table(RIVER,SPECIES)) 
+RiverXFish
+# Create Barplot 
+barplot(RiverXFish, col = rainbow(4))
+```
+
+## Task 5
+```{r}
+pie(SpeciesTab,col=rainbow(4))
+pie(RiversTab,col=rainbow(4))
+```
+
+## Task 6
+```{r}
+layout(matrix(c(1,2,3),nr=1,nc=3))# 1 row 3 cols
+with(ddt,boxplot(LENGTH,ylab="LENGTH",col="Blue",notch=TRUE))
+with(ddt,boxplot(WEIGHT,ylab="WEIGHT",col="Green",notch=TRUE))
+with(ddt,boxplot(MILE,ylab="MILE",col="Red",notch=TRUE))
+```
+
+## Task 7
+```{r}
+#
+coplot(WEIGHT~LENGTH|RIVER,data=ddt,col= rainbow(4))
+#
+coplot(DDT~WEIGHT|SPECIES,data=ddt,col=rainbow(4))
+```
+
+## Task 8
+
+```{r}
+#Using dplyr
+library(dplyr)
+library(ggplot2)
+# notice how the infix %>% operator works ( the pipe )
+
+ddt %>% ggplot(aes(x=SPECIES,y=WEIGHT,fill=RIVER)) + geom_boxplot() + ggtitle("Evan Blosser")
+```
+```{r}
+ddt %>% ggplot(aes(x=RIVER,y=LENGTH,fill=SPECIES)) + geom_violin() + ggtitle("Evan Blosser")
+```
+
+```{r}
+ggplot(ddt, aes(x=WEIGHT, y=LENGTH)) + geom_point(aes(color = SPECIES)) + ggtitle("Evan Blosser")
+
+```
+
+
+
+

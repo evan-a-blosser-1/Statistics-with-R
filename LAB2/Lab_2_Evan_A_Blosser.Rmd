@@ -1,0 +1,123 @@
+---
+title: "Lab 2"
+author: "Evan Blosser"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Task 1
+```{r}
+getwd()
+```
+
+
+# Task 2
+```{r}
+EPAGAS <- read.csv(file = "EPAGAS.csv")
+head(EPAGAS)
+```
+
+
+# Task 3
+
+## Bullet Point 1 & 2
+```{r}
+mpg <- EPAGAS$MPG
+mpg
+z <- (mpg-mean(mpg))/sd(mpg)
+```
+As shown below the mean of **z** was calculated to be approximately 0 (1.058709e-16); while the square root of the standard deviation of **z** was calculated to be 1:
+```{r}
+mean(z)
+sd(z)^2
+```
+
+## Bullet Point 3 & 4
+The outlier of **MPG** was found to be $44.9$.
+
+While the possible outliers are $30.0$, $42.1$, and $31.8$.
+
+```{r}
+# Find the z values greater than 3 in size
+z[abs(z)>3]
+
+# Find the I values corresponding to these z values
+mpg[abs(z)>3]
+
+# Find the values of z that are possible outliers
+z[abs(z)>=2 & abs(z)<=3]
+
+#Find the values of I which are possible outliers
+mpg[abs(z)>=2 & abs(z)<=3]
+``` 
+
+## Bullet Point 5
+ 
+```{r}
+# Plot the outliers in red and the possible outliers in blue
+mycol = ifelse(abs(z)>3, "Red",
+        ifelse(abs(z)>=2 &abs(z)<=3,"Blue", "Black"))  
+
+#Plot points with different plotting shapes        
+mypch = ifelse(abs(z)>3, 20,
+        ifelse(abs(z)>=2 &abs(z)<=3,21, 22))
+library(lattice)
+dotplot(mpg,col=mycol)
+```
+
+
+# Task 4
+
+## Bullet Point 1
+```{r}
+boxplot(mpg,main="Miles Per Gallon: Task 4 Outlier identification",ylab="mpg",col="Blue",notch=TRUE)
+```
+
+## Bullet Point 2
+
+Chebyshev's theorem states that generally at least: 
+$$
+ \big( 1- \frac{1}{k^2} \big)    
+$$
+measruments will fall within k standard deviations of the mean. Or the intervals fopr samples and populations respectively.
+$$
+(\bar{y} \pm ks)
+$$
+$$
+ (\sigma \pm ks) 
+$$
+Given that we need to predict the proportion of data within 2 standard deviations of the mpg mean:
+$$
+ \big( 1- \frac{1}{2^2} \big) = \frac{3}{4}   
+$$
+it can be seen that the proportion of data within 2 standard deviations of the mpg mean is $\frac{3}{4}$ of the data using **Chebyshev's theorem**.
+
+## Bullet Point 3
+
+Using **R** the exact proportion was calculated to be **0.96**.
+```{r}
+# Actual Proportion
+length(mpg[abs(z)<2])/length(mpg)
+```
+## Bullet Point 4
+**Chebyshev's theorem** does agree with the data in that there is at least $\frac{3}{4}$ of the data. However, this is fairly inaccurate as the actual proportion of data within 2 standard deviations of the mean was **0.96** or $96\%$.
+
+## Bullet Point 5
+
+By the **Empirical Rule** the proportion of data is $95\%$ for 2 standard deviations of he mean.
+
+## Bullet Point 6
+
+I would say that the **Empirical Rule** corresponds more closely to the calculated proportion as compared to **Chebyshev's theorem**; as the **Empirical Rule** was off by only $1\%$.
+
+## Bullet Point 7
+
+I would say that the **Empirical Rule** is more valid in this case, becasue it accuratly described the proportion of data  within 2 standard deviations of the mean as compared to **Chebyshev's theorem**. 

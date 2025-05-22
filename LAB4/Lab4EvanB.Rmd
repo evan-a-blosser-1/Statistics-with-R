@@ -1,0 +1,365 @@
+---
+title: 'Lab 4'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Task 1
+```{r}
+getwd()
+```
+
+
+# Task 2
+```{r}
+spruce.df <- read.csv(file = "SPRUCE.csv")
+tail(spruce.df)
+```
+
+
+
+# Task 3
+
+## trendscatter()
+```{r}
+library(s20x)
+trendscatter(Height~BHDiameter,f=0.5,data=spruce.df)
+```
+
+## Linear Model
+```{r}
+spruce.lm=lm(Height~BHDiameter,data=spruce.df)
+summary(spruce.lm)
+```
+
+
+## Finding Residuals
+
+```{r}
+height.res=residuals(spruce.lm)
+height.fit=fitted(spruce.lm)
+```
+
+
+
+## Residuals vs. Fitted values
+```{r}
+plot(height.fit,height.res)
+```
+
+
+
+## trendscatter(): Residuals vs. Fitted values
+
+Compared to the trendscatter() from previous; this graph has a far greater curve to the fit then the previous, and is far less linear looking. Although both are not fairly linear.
+```{r}
+trendscatter( height.fit,height.res)
+```
+
+
+
+## plot() residuals
+```{r}
+plot(spruce.lm, which =1)
+```
+
+
+## normcheck() & Shapiro-Wilk
+```{r}
+normcheck(spruce.lm,shapiro.wilk = TRUE)
+```
+
+## P-value and NULL Hypothesis
+the p-value is $0.29$ which is not very large, however does not entirely discount the NULL Hypothesis. In this case we can accept the NULL Hypothesis.
+
+
+## Describe Model
+```{r}
+summary(spruce.lm)
+```
+The quadratic is: $y_i = 9.14684 +0.48147x_i$, and works well with the data, thus we accept the residuals are approximately **Normal**.
+
+
+## Straight Line Conlusion
+The straight line can only be applied if the data itself is linear in nature, using quadratics and other fit equations can help give a better understanding of the data, which is why the use of the straight line in Lab 3 was not ideal. 
+
+
+# Task 4
+
+## quad.lm
+```{r}
+quad.lm=lm(Height~BHDiameter + I(BHDiameter^2),data=spruce.df)
+summary(quad.lm)
+```
+
+## Scatter Plot: Height vs BHDiamter
+```{r}
+plot(Height~BHDiameter,bg="Blue",pch=21,cex=1.2,
+     ylim=c(0,max(Height)),xlim=c(0,max(BHDiameter)), 
+     main="Spruce height prediction",data=spruce.df)
+
+coef(quad.lm)
+names(quad.lm)
+quad.lm$coef[2]
+
+myplot=function(x){
+  0.86089580 +1.46959217*x  -0.02745726*x^2
+}
+
+curve(myplot, lwd=2, col="steelblue",add=TRUE)
+```
+
+## quad.fit
+```{r}
+quad.fit = fitted(quad.lm)
+plot(quad.lm)
+```
+
+## Check Normality
+```{r}
+normcheck(quad.lm,shapiro.wilk = TRUE)
+```
+
+## P-value and NULL Hypothesis
+As we can see the p-value is $0.684$, which is even greater than the p-value within task 3, thus we can accept the NULL Hypothesis with a greater significance then previously.  
+
+
+
+# Task 5
+
+## Summarize quad.lm
+```{r}
+summary(quad.lm)
+coef(quad.lm)
+```
+
+## $\hat{\beta_0}$ Value:
+This value is the "intercept" $0.860896$
+
+## $\hat{\beta_1}$ Value:
+This value is $1.469592$
+
+## $\hat{\beta_2}$ Value:
+This value is $-0.027457$
+
+## Estimator for $\hat{\beta_0}$, $\hat{\beta_1}$, $\hat{\beta_2}$
+```{r}
+ciReg(quad.lm)
+```
+
+
+
+## The Equation of the Fitted Line
+
+$$
+\begin{align*}
+\hat{Height} = 0.860896 + 1.469592\cdot BHDiameter -0.027457\cdot BHDiameter^2
+\end{align*}
+$$
+
+## Prediction
+```{r}
+predict(quad.lm, data.frame(BHDiameter=c(15,18,20)))
+```
+## Prediction comparison 
+```{r}
+predict(spruce.lm, data.frame(BHDiameter=c(15,18,20)))
+```
+The non-quadratic predictions are significantly smaller then that of the predictions made with the quadratic as it follows quadratic growth rather than linear.
+
+
+## Multiple R-sqaured
+```{r}
+summary(quad.lm)$r.squared
+```
+
+$R^2 =  0.7741266$
+
+
+```{r}
+summary(spruce.lm)$r.squared
+```
+
+$R^2 =  0.6569146$
+
+Compared to the *spruce.lm* model; it can be seen that the quadratic model, *quad.lm*, has made a better fit by approximately $12.73\%$. 
+
+
+
+
+## Adjusted R-sqaured
+
+Looking into the web showed that the Adjusted R-squared is a version of R-squared that has been adjusted for the number of predictions in the model. If the Adjusted R-squared increases from R-squared, then the new term improved the model more than expected. Yet, as can be sen the value decreased which means the predictor did not necessarily improve the model significantly. 
+
+```{r}
+summary(quad.lm)$adj.r.squared
+```
+$Adjusted-R^2 =  0.7604373$
+
+```{r}
+summary(spruce.lm)$adj.r.squared
+```
+$Adjusted-R^2 =  0.6468239$
+
+
+## Meaing of R-squared
+In this case this shows how well the model is fitting to the data, or how good of a model it is. As the R-squared term represents the variance for a dependent variable, in our case *BHDiameter*, and how well we can explain independent variables with the model; such as predicting the *height* of trees. In this case the *quad.lm* model most accurately explains the **variability in the Height**.
+
+
+## anova()
+```{r}
+add1(spruce.lm,.~.+I(BHDiameter^2))
+anova(spruce.lm)
+anova(quad.lm)
+anova(spruce.lm,quad.lm)
+```
+This shows the *quad.lm* model has a greater degree of accuracy then that of the *spuce.lm* model. 
+
+
+## TSS, MSS, RSS, & MSS/TSS
+```{r}
+height.qfit=fitted(quad.lm)
+RSS=with(spruce.df, sum((Height-height.qfit)^2))
+RSS
+MSS = with(spruce.df, sum((height.qfit-mean(Height))^2))
+MSS
+TSS = with(spruce.df, sum((Height-mean(Height))^2))
+TSS
+MSS/TSS
+```
+$RSS = 63.00683$, $MSS = 215.9407$, $TSS = 278.9475$, $MSS/TSS = 0.7741266$; Thus $77.41\%$ of the data can be explained through the model. 
+
+
+
+
+
+
+# Task 6
+
+## Cooks Plot
+```{r}
+cooks20x(quad.lm)
+```
+
+Cook's distance is used to identify outliers in the **X-Values**, and is essentially the scaled change in fitted values. This is fairly useful to estimate the influence of these **X-Values** on the fitted response values of the model when performing the least squares regression.
+
+This tells us that there is a BHDiameter measurement observed of *24*  has a significant impact on the model.
+
+## quad2.lm
+```{r}
+quad2.lm=lm(Height~BHDiameter + I(BHDiameter^2) , data=spruce.df[-24,])
+summary(quad2.lm)
+summary(quad.lm)
+```
+
+## Conclusion
+As can be seen the new model *quad2.lm* has an R-squared value of $0.8159$ or $81.59\%$ of the data is now explained by the model. This is a significant increase of approximately $4.18\%$, and shows us that the *Cook's Distance* did infarct help us isolate an outlier that impacted our model.  
+
+
+# Task 7
+
+## Proof
+
+We first define the lines $l_1$ & $l_2$, as the 2 lines in the piecewise: 
+$$
+\begin{align*}
+l_1:y =& \beta_0 +\beta_1x   \\
+l_2:y =& \beta_0 +\delta + (\beta_1+\beta_2)x  
+\end{align*}
+$$
+we can then solve for $\delta$ setting the equations equal to $y_k$ & $x=x_k$:
+$$
+\begin{align*}
+\beta_0 +\beta_1x_k = &y_k = \beta_0 +\delta + (\beta_1+\beta_2)x+k  \\
+\beta_0 +\beta_1x_k =& \beta_0 +\delta + (\beta_1+\beta_2)x_k  \\
+\beta_0-\beta_0 +\beta_1x_k- \beta_1x_k=& \delta + \beta_2x_k\\
+0=& \delta + \beta_2x_k\\
+\delta=&  - \beta_2x_k\\
+\end{align*}
+$$
+Thus we find that for $l_2$:
+$$
+\begin{align*}
+l_2:y =& \beta_0 +\delta + (\beta_1+\beta_2)x \\
+    y =& \beta_0 +(- \beta_2x_k) + \beta_1x + \beta_2x\\
+    y =& \beta_0 +  \beta_1x + \beta_2 (x-x_k)\\
+    \\
+    Thus&\\
+    y =& \beta_0 +  \beta_1x + \beta_2 (x-x_k)I(x>x_k)\\
+    where: \hspace{2.5mm} &I()\hspace{2.5mm} is\hspace{2.5mm} 1\hspace{2.5mm} when\hspace{2.5mm} x>x_k\hspace{2.5mm} and\hspace{2.5mm} 0 \hspace{2.5mm}else
+\end{align*}
+$$
+
+
+
+
+
+
+## Graph
+```{r}
+## piecewise linear model in R
+## Model y = b0 + b1x + b2(x-xk)*(x>xk)
+## You will need to change the code appropriately
+sp2.df=within(spruce.df, X<-(BHDiameter-18)*(BHDiameter>18)) # this makes a new variable and places it within the same df
+sp2.df
+
+lmp=lm(Height~BHDiameter + X,data=sp2.df)
+tmp=summary(lmp)
+names(tmp)
+myf = function(x,coef){
+  coef[1]+coef[2]*(x) + coef[3]*(x-18)*(x-18>0)
+}
+plot(spruce.df,main="Piecewise regression")
+myf(0, coef=tmp$coefficients[,"Estimate"])
+curve(myf(x,coef=tmp$coefficients[,"Estimate"] ),add=TRUE, lwd=2,col="Blue")
+abline(v=18)
+text(18,16,paste("R sq.=",round(tmp$r.squared,4) ))
+```
+
+
+
+# Task 8
+
+The function I chose was the *myf()* which builds a quadratic linear model equation using a list of coefficients. The output is a usable quadratic eauation, thus to show it works I included the plut the function would be used on, and was used on in **Task 7**.  
+```{r}
+library(MATH4753EvanB)
+###########################################
+# Liner model from the modified spruce.df data
+lmp=lm(Height~BHDiameter + X,data=sp2.df)
+# Basic plot to add 'myf()' to
+plot(spruce.df,main="Piecewise regression")
+###########################################
+
+
+### Calling function 'myf()' from lab4.r that has been incorporated into my package:
+MATH4753EvanB::myf(0, coef=tmp$coefficients[,"Estimate"])
+### Make a curve using the equation made from 'myf()'
+curve(myf(x,coef=tmp$coefficients[,"Estimate"] ),add=TRUE, lwd=2,col="Blue")
+
+
+#####################################################
+# Line and notations
+abline(v=18)
+text(18,16,paste("R sq.=",round(tmp$r.squared,4) ))
+######################################################  
+```
+
+
+
+
+
+
