@@ -1,0 +1,416 @@
+---
+title: 'Assignment 4'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questions{10/10}
+
+## Q 1
+
+### a
+Random Selection
+```{r}
+nzbirds <- read.csv(file = "NZBIRDS.csv")
+species <- MATH4753EvanB::rand.data.select(nzbirds,35)
+species
+```
+
+
+### b
+Mean and Standard deviation calculations were carried out and utilized in the *alpha.ci()* function called below:
+```{r}
+Q1ci <-MATH4753EvanB::alpha.ci(per =0.95,sample = species$Body.Mass)
+Q1ci
+```
+
+
+
+### c
+The interval created from the 35 samples, will **sometimes** dip into the negative numbers if the sample is severely skewed. Overall the confidence interval shows that the majority of the birds body mas will fall in between:
+```{r}
+print(paste0("",Q1ci,""))
+```
+
+
+### d
+As can be seen below the, the true mean is included in the confidence interval. As the mean should be near or on the center concentration of data, it logically makes sense that the mean should lie in the approximate middle of the confidence interval, or at the very least be included.  
+```{r}
+true.mean<- mean(nzbirds$Body.Mass)
+print(paste0("The true mean is: ",true.mean,""))
+```
+
+
+
+
+
+### e
+As can be seen below the mean falls in the confidence interval:
+```{r}
+Q1ci.e <-MATH4753EvanB::alpha.ci(per =0.95,sample = species$Egg.Length)
+Q1ci.e
+mean(species$Egg.Length)
+```
+
+
+
+### f
+For the point estimates we find:
+$$
+\begin{align*}
+\hat{P}_{extinct} = \frac{Y}{n} = \frac{21}{38} = 0.5526316\\
+\hat{P}_{nonextinct} = \frac{Y}{n} = \frac{7}{78} = 0.08974359
+\end{align*}
+$$
+
+```{r}
+alpha = 0.05
+z.alpha = stats::qnorm(1-alpha/2,mean=0,sd=1)
+z.alpha
+```
+
+
+
+Thus we find that the confidence interval is:
+$$
+\begin{align*}
+Confidance\hspace{2.5mm} Interval =& \bigg( (\bar{P_{ex}}-\bar{P_{non}}) \pm z_{\alpha/2} \sqrt{\frac{P_{ex}(1-P_{ex})}{n_1}+\frac{P_{ex}(1-P_{ex})}{n_2}} \bigg) \\
+=& \bigg( (0.5526-0.08974) \pm  (1.959964) \sqrt{\frac{0.5526(1-0.5526)}{38}+\frac{0.08974(1-0.08974)}{78}} \bigg) \\
+=&\bigg( (0.462888) \pm  0.1703405 \bigg)\\
+\\
+=& \big(0.2925475, \hspace{2.5mm} 0.6332285\big)
+\end{align*}
+$$
+Thus the $95\%$ confidence interval is approximately $(0.2926,0.6332)$, using all significant figures within calculations. 
+
+
+### g
+Yes the confidence interval from part **f** supports this theory as the proportion shows there are significantly more extinct birds that are flightless.Furthermore both the normal approximations are good enough to use as:
+$$
+\begin{align*}
+np_{extinct}\geq 4 &\longrightarrow (38)( 0.5526316) = 21 \geq 4\\
+\\
+np_{nonextinct} =& 7 \geq 4
+\end{align*}
+$$
+
+
+
+
+
+## Q 2
+
+
+### a
+First we find $z_{\alpha/2}$ as follows:
+```{r}
+alpha = 0.1
+z.alpha = stats::qnorm(1-alpha/2,mean=0,sd=1)
+z.alpha
+```
+
+Next, given $n_1 = 100$, $n_2 = 47$, $S_1= 422$, $S_2= 271$, $\mu_1= 1312$, & $\mu_2= 1352$ we can find the confidence interval as follows: 
+$$
+\begin{align*}
+Confidance\hspace{2.5mm} Interval =& \bigg( (\bar{Y_1}-\bar{Y_2}) \pm z_{\alpha/2} \sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}} \bigg) \\
+=& \bigg( (1312-1352) \pm  (1.644854) \sqrt{\frac{422^2}{100}+\frac{271^2}{47}} \bigg) \\
+=&\bigg( (-40) \pm  95.10919 \bigg)\\
+\\
+=& \big(-135.1092, \hspace{2.5mm}55.10919 \big)
+\end{align*}
+$$
+Thus the $90\%$ confidence interval is approximately $(-135.109,55.109)$, using all significant figures within calculations. 
+
+
+### b 
+Given that $n_1 =100$ & $n_2 = 47$, then $\nu_1 = 99$ & $\nu_2 = 46$. Using Table 10 in the appendix we find that $F_{c1}=1.55$ & $F_{c2}=1.49$
+$$
+\begin{align*}
+Confidance\hspace{2.5mm} Interval =&   \frac{S_1^2}{S_2^2} \frac{1}{F_c}  \leq \frac{\sigma_1^2}{\sigma_2^2} \leq \frac{S_1^2}{S_2^2} F_c  \\
+=&   \frac{422^2}{271^2} \frac{1}{1.55}  \leq \frac{\sigma_1^2}{\sigma_2^2} \leq \frac{422^2}{271^2} 1.49   \\
+=&  (2.424858) \frac{1}{1.55} \leq \frac{\sigma_1^2}{\sigma_2^2} \leq (2.424858)1.49   \\
+\\
+=& 1.564425 \leq \frac{\sigma_1^2}{\sigma_2^2} \leq 3.613038
+\end{align*}
+$$
+
+Thus we find the $95\%$ confidence interval to be $(1.564,3.613)$, and does show that the two shear stresses variances differ by a significant margin. 
+
+
+
+## Q 3
+
+### a
+Given that a normal distribution is:
+$$
+\begin{align*}
+Z = \frac{Y-\mu}{\sigma} = \frac{Y-0}{\sigma} = \frac{Y}{\sigma}
+\end{align*}
+$$
+
+we can conclude that a chi-square distribution with 1 degree of freedom would take the form of:
+$$
+\begin{align*}
+Z^2 = \chi^2=\frac{(n-1)s^2}{\sigma^2} = \frac{Y^2}{\sigma^2}
+\end{align*}
+$$
+
+
+### b
+$$
+\begin{align*}
+P \bigg(  \chi^2_{1-\alpha/2} \leq  \frac{Y^2}{\sigma^2} \leq \chi^2_{\alpha/2}  \bigg) =& 1- \alpha\\
+=&  \bigg(   \frac{1}{\chi^2_{1-\alpha/2}}  \geq  \frac{\sigma^2}{Y^2} \geq   \frac{1}{\chi^2_{\alpha/2} }   \bigg) \\
+=&  \bigg(  \frac{1}{\chi^2_{\alpha/2} } \leq  \frac{\sigma^2}{Y^2} \leq      \frac{1}{\chi^2_{1-\alpha/2}}  \bigg) \\
+\\
+Thus: &\\
+Confidence \hspace{2.5mm} Interval =&  \bigg(  \frac{Y^2}{\chi^2_{\alpha/2} } \leq  \sigma^2 \leq      \frac{Y^2}{\chi^2_{1-\alpha/2}}  \bigg) 
+\end{align*}
+$$
+
+
+
+
+
+## Q 4
+
+
+### a
+The Null and Alternate Hypotheses are as follows: 
+$$
+H_o: \mu=2 \hspace{2.5mm} micrometers\\
+H_1: \mu\neq 2 \hspace{2.5mm} micrometers
+$$
+
+
+### b
+The test statistic is $-1.02$ and the p-value is $0.322$;both found in the given table for 8.24 as a MINITAB output.
+
+
+
+### c
+For the given $\alpha = 0.05$ & $N=20$, we find $\nu = N-1 = 19$, thus the rejection region is defined as:
+$$
+\begin{align*}
+t_{0.05/2}\pm 2.0930\\ 
+\end{align*}
+$$
+
+### d 
+The test statistic falls inside the rejection region; thus, we do **not** reject the NULL hypothesis. 
+
+
+### e
+In both cases, and interval is made with the bounds set top reject the hypothesis if the parameter exceeds this. The *test statistic* shows the general trend of the data within these bounds, and as long as it does not exceed those defined bounds the hypothesis is valid. 
+
+
+
+
+
+## Q 5
+```{r}
+wisclakes <- read.csv(file = "WISCLAKES.csv")
+mean(wisclakes$DOC)
+sd(wisclakes$DOC)
+```
+
+
+### a
+The hypothesis test (at \alpha =.10) is defined as:
+$$
+H_o: \mu=15\\
+H_1: \mu\neq 15
+$$
+
+
+The test statistic as then:
+$$
+\begin{align*}
+t = \frac{\bar{y}-\mu_o}{\frac{s}{\sqrt{n}}} = \frac{14.516-15}{\frac{12.96369}{\sqrt{25}}} = -0.1851852
+\end{align*}
+$$
+
+
+
+### b
+For the likelihood:
+$$
+\begin{align*}
+\bar{y} = \mu_o \pm  t  \bigg(\frac{s}{\sqrt{n}} \bigg)\\
+\bar{y} = 15 \pm  1.711  \bigg(\frac{12.96369}{\sqrt{25}} \bigg)\\
+\\
+\bar{y} =  10.56509  \hspace{2.5mm} or \hspace{2.5mm} 19.43491
+\end{align*}
+$$
+Thus, we reject the NULL hypothesis as $\bar{y}$ exceeds the bounds(ie $\mu_a=14$) and not $15$ from the hint in the text). We then need to find the probability for $\mu_a=14$:
+$$
+\begin{align*}
+P(\bar{y} < 10.57|\mu_a=14) + P(\bar{y} > 19.44|\mu_a=14)=& P \bigg( t< \frac{10.56509-14}{\frac{12.96369}{\sqrt{25}}}  \bigg) +  P \bigg( t> \frac{19.43491-14}{\frac{12.96369}{\sqrt{25}}}  \bigg)\\
+=&P(t< -1.325)+P(t>2.097)\\
+=&0.0980+0.0232\\
+\\
+P(\bar{y} < 10.57|\mu_a=14) + P(\bar{y} > 19.44|\mu_a=14)=& 0.1212
+\end{align*}
+$$
+
+Thus the likelihood the mean differs from $15$ to $14$ is roughly $12.12\%$.
+
+
+
+## Q 6
+```{r}
+orchard <- read.csv(file = "ORCHARD.csv")
+orchard
+```
+
+
+```{r}
+library(dplyr)
+orchfog <- with(orchard, orchard[CONDITION =="FOG",])
+orchclear <- with(orchard, orchard[CONDITION !="FOG",])
+orch <- mutate(orchard, Cond = recode(CONDITION, CLOUD = "CLCL", CLEAR = "CLCL"))
+t.test(RATIO~Cond, var.equal=TRUE,mu=0,data=orch)
+t.test(orchclear$RATIO, orchfog$RATIO, var.equal = TRUE, mu = 0)
+```
+
+### Conclusion
+As can be seen above the mean of the OXON/THION for the Foggy day was significantly lower for that of clear and cloudy days. We **accept** the NULL hypothesis as the p-value exceeds the set $\alpha$ significantly as $p-value = 0.2924$. 
+
+
+
+
+## Q 7
+
+### a
+As seen below in the test, the ratio of variance was found to be $0.004234$, thus p-value does **not** exceed the $\alpha$ value and we reject the hypothesis:
+```{r}
+gas <- read.csv(file = "GASTURBINE.csv")
+head(gas)
+gastrad <- with(gas, gas[ENGINE=="Traditional",])
+gasaero <- with(gas, gas[ENGINE=="Aeroderiv",])
+var.test(gastrad$HEATRATE, gasaero$HEATRATE, var.equal = TRUE, ratio = 1)
+```
+
+### b
+As seen below in the test, the ratio of variance was found to be $1.192\times 10^{-6}$, thus p-value does **not** exceed the $\alpha$ value and we reject the hypothesis:
+```{r}
+gasadv <- with(gas, gas[ENGINE=="Advanced",])
+var.test(gasadv$HEATRATE, gasaero$HEATRATE, var.equal = TRUE, ratio = 1)
+```
+
+
+
+## Q 8
+
+### a
+The NULL is as follows:
+$$
+\begin{align*}
+H_o: \frac{\sigma_1^2}{\sigma_2^2}=1\\
+\\
+\\
+H_1: \frac{\sigma_1^2}{\sigma_2^2}\neq 1
+\end{align*}
+$$
+
+### b
+The test statistic is $F=0.73076$:
+```{r}
+gobi <- read.csv(file = "GOBIANTS.csv")
+gobi
+gobigobi <- with(gobi, gobi[Region=="Gobi Desert",])
+gobistep <- with(gobi, gobi[Region=="Dry Steppe",])
+var.test(gobigobi$AntSpecies, gobistep$AntSpecies, var.equal = TRUE, ratio = 1)
+```
+
+
+### c
+Rejection interval: $(0.07803576, 5.39879786)$
+
+
+### d
+$p-value = 0.7264$
+
+### e
+As the *p-value* exceeds $\alpha$ significantly there is not enough evidence to reject the null hypothesis. 
+
+
+### f
+The condition is the samples must be independent of each other. 
+
+
+## Q 9
+As seen below the $p-value = 0.03396$ which can be significant enough reason to reject the NULL hypothesis; especially if we set $\alpha = 0.05$ for a $95\%$ confidence. 
+```{r}
+thrup <-read.csv(file = "THRUPUT.csv")
+thrup
+t.test(thrup$HUMAN, thrup$AUTO,var.equal=TRUE, paired = TRUE,mu=0,data=thrup)
+```
+
+
+
+
+## Q 10
+
+### *myboot()*
+```{r}
+myboot<-function(iter=10000,x,fun="mean",alpha=0.05,...){  #Notice where the ... is repeated in the code
+n=length(x)   #sample size
+
+y=sample(x,n*iter,replace=TRUE)
+rs.mat=matrix(y,nr=n,nc=iter,byrow=TRUE)
+xstat=apply(rs.mat,2,fun) # xstat is a vector and will have iter values in it 
+ci=quantile(xstat,c(alpha/2,1-alpha/2))# Nice way to form a confidence interval
+# A histogram follows
+# The object para will contain the parameters used to make the histogram
+para=hist(xstat,freq=FALSE,las=1,
+main=paste("Histogram of Bootstrap sample statistics","\n","alpha=",alpha," iter=",iter,sep=""),col=4:8)
+
+#mat will be a matrix that contains the data, this is done so that I can use apply()
+mat=matrix(x,nr=length(x),nc=1,byrow=TRUE)
+
+#pte is the point estimate
+#This uses whatever fun is
+pte=apply(mat,2,fun)
+abline(v=pte,lwd=3,col="Black")# Vertical line
+segments(ci[1],0,ci[2],0,lwd=4)      #Make the segment for the ci
+cit = 
+
+text(xstat[1],0,paste("(",round(xstat[1],2),sep=""),col="blue",cex=1.5)
+text(xstat[2],0,paste(round(xstat[2],2),")",sep=""),col="blue",cex=1.5)
+
+text(ci[1],0,paste("(",round(ci[1],2),sep=""),col="Red",cex=3)
+text(ci[2],0,paste(round(ci[2],2),")",sep=""),col="Red",cex=3)
+
+# plot the point estimate 1/2 way up the density
+text(pte,max(para$density)/2,round(pte,2),cex=3)
+
+return(list(fun=fun,x=x,ci=ci))# Some output to use if necessary
+}
+
+```
+
+
+
+### Running *myboot()*
+```{r}
+set.seed(35)
+sam<-round(rnorm(30,mean=20,sd=3),3)
+myboot(iter=10000,x=sam,fun="mean",alpha=0.05)
+```
+
+
+

@@ -1,0 +1,703 @@
+---
+title: 'Assignment 3'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Questions{16/16}
+
+## Q 1
+
+### a
+
+For an arrival time of at least 2 minutes:
+$$
+\begin{align*}
+P(Y>2minutes) = e^{\frac{-120seconds}{95}} \approx 0.2927597
+\end{align*}
+$$
+
+### b 
+
+It can be observed below that this does follow an exponential distribution with $\beta =95$:
+```{r}
+phishing <- read.csv(file = "PHISHING.csv")
+summary(phishing)
+hist(phishing$INTTIME, main="In Time",xlab="Time in Seconds")
+
+```
+
+
+
+
+## Q 2
+
+### a
+Given $\alpha = 3$ & $\beta = 0.07$ the mean and variance are as follows:
+$$
+\begin{align*}
+mean = \alpha&\beta = (3)(0
+.07) = 0.21\\
+\\
+variance = \alpha\beta^2 &= (3)(0.07)^2= 0.0147
+\end{align*}
+$$
+
+### b
+For the probability that the flood level was greater then **0.6** million cubic feet per second:
+$$
+\begin{align*}
+P(y>0.6) =& \int_{0.6}^\infty \frac{y^{\alpha - 1}e^{\frac{-y}{\beta}}}{\beta^\alpha \Gamma(\alpha)} dy \\
+         =& \frac{1}{\beta^\alpha \Gamma(\alpha)}\int_{0.6}^\infty y^{\alpha-1}e^{\frac{-y}{\beta}}  dy \\
+         =& \frac{1}{0.07^3 \Gamma(3)} \int_{0.6}^\infty y^{3 - 1}e^{\frac{-y}{0.07}}  dy\\
+\end{align*}
+$$
+Integrating this and solving using a calculator yiedls:
+$$
+\begin{align*}
+P(y>0.6) \approx 0.008772
+\end{align*}
+$$
+It can be inferred that for, a gamma distribution of $\alpha = 3$ & $\beta = 0.07$, the flood levels above **0.6** million cubic feet per second are not very probable with a probability of only $0.88\%$.
+
+
+## Q 3
+
+### a
+Given $\alpha = 2$ & $\beta = 2$ or $\alpha = 1$ & $\beta = 4$, formulas A & B respectively, the mean for both are as follows:
+$$
+\begin{align*}
+mean_A = \alpha&\beta = (2)(2) = 4\\
+\\
+mean_B = \alpha&\beta = (1)(4) = 4\\
+\end{align*}
+$$
+
+### b
+Given $\alpha = 2$ & $\beta = 2$ or $\alpha = 1$ & $\beta = 4$, formulas A & B respectively, the variance for both are as follows:
+$$
+\begin{align*}
+variance_A = \alpha\beta^2 &= (2)(2)^2= 8 \\
+\\
+variance_B = \alpha\beta^2 &= (1)(4)^2= 16 \\
+\end{align*}
+$$
+
+
+### c 
+For $\alpha = 2$ & $\beta = 2$:
+$$
+\begin{align*}
+P(y>1) =& \int_{0}^1\frac{y^{2 - 1}e^{\frac{-y}{2}}}{2^2 \Gamma(2)} dy \\
+         =& \frac{1}{4}\  [ y^{1}e^{\frac{-y}{\beta}}|_0^1 dy \\
+         =& 0.09020\\
+\end{align*}
+$$
+
+
+For $\alpha = 1$ & $\beta = 4$:
+$$
+\begin{align*}
+P(y>1) =& \int_{0}^1\frac{y^{1- 1}e^{\frac{-y}{4}}}{4^1 \Gamma(1)} dy \\
+         =& \frac{1}{4}\  [ -4e^{\frac{-y}{\beta}}|_0^1 dy \\
+         =& 0.2212\\
+\end{align*}
+$$
+Thus we find that the formula B has a higher probability of generating a human reaction in less then 1 minute.
+
+
+
+## Q 4
+
+### a
+Given the Weibull distribution of $\alpha = 2$ & $\beta = 4$, the proportion of washers repaired under the 2 year warranty is:
+$$
+\begin{align*}
+where: F(y) =& 1-e^{\frac{-y^\alpha}{\beta}}\\
+\\
+P(y<2) =& F(2) = 1-e^{\frac{-2^2}{4}} \\
+\\
+       P(y<2)  =& 0.63212\\
+\end{align*}
+$$
+
+
+
+### b
+The mean and standard deviation are,$1.77$ & $0.6551$ respectively,and calculated as follows:
+$$
+\begin{align*}
+\mu =& \beta^{1/\alpha} \Gamma (\frac{\alpha+1}{\alpha})\\
+     =& 4^{1/2} \Gamma (\frac{2+1}{2})\\
+     =& 1.77
+\\
+\sigma^2 =& \beta^{2/\alpha} [\Gamma(1+ \frac{2}{\alpha})-\Gamma^2(\frac{\alpha+1}{\alpha})] \\
+      =& 4^{2/2} [\Gamma(1+ \frac{2}{2})-\Gamma^2(\frac{2+1}{2})] \\
+      =& 0.4292\\
+\sigma =& \sqrt(0.4292)\\
+      =& 0.6551
+\end{align*}
+$$
+
+
+### c
+
+$P(\mu-2\sigma\leq Y \leq \mu+2\sigma)$ is as follows:
+
+$$
+\begin{align*}
+P(\mu-2\sigma\leq Y \leq \mu+2\sigma) =& P(1.77-2(0.6551)\leq Y \leq 1.77+2(0.6551))\\
+=&P(0.4598\leq Y \leq 3.0802)\\
+=&P(Y<3.0802)-P(Y<0.4598)\\
+=&F(3.0802)-F(0.4598)\\
+=& 1-e^{\frac{-3.0805^2}{4}} - 1-e^{\frac{-0.4598^2}{4}}\\
+=&0.855259
+\end{align*}
+$$
+
+### d
+As the value of P(Y>6) is $0.9998766$ or $99.98766\%$ it is very liklley that **Y** will exceed 6 years; calculations are as follows:
+$$
+\begin{align*}
+P(Y>6) =& 1 - P(Y<6)\\
+=&   1-e^{\frac{-6^2}{4}}\\
+=& 0.9998766
+\end{align*}
+$$
+
+
+
+
+## Q 5
+Given $\alpha = 2$ & $\beta = 9$:
+
+### a
+The mean and variance of **Y** are,$0.1818182$ & $0.01239669$ respectively,and calculated as follows:
+$$
+\begin{align*}
+\mu =& \frac{\alpha}{\alpha +\beta} \\
+=& \frac{2}{2+9} \\
+=& 0.1818182\\
+\\
+\sigma^2 =& \frac{\alpha\beta}{(\alpha +\beta)^2(\alpha +\beta+1)}\\
+=& \frac{2\cdot9}{(2 +9)^2(2 +9+1)}\\
+=& 0.01239669
+\end{align*}
+$$
+
+### b
+For the distribution we find the probability is roughly $4.63\%$ and calculated as follows:
+$$
+\begin{align*}
+f(y) =& \frac{10!}{8!}y(1-y)^8\\
+=& 90y(1-y)^8\\
+\\
+P(Y\geq 0.4) =& \int_{0.4}^1 90y(1-y)^8 dy\\
+\approx&0.0463
+\end{align*}
+$$
+
+
+
+### c
+It was found that the probability at most $10\%$ of the budget is used is roughly $26.39\%$ and calculated as follows:
+$$
+\begin{align*}
+P(Y< 0.1) =& \int_{0.1}^1 90y(1-y)^8 dy\\
+\approx&0.2639
+\end{align*}
+$$
+
+
+
+## Q 6
+
+### a
+Examining the given piecewise with the known relation shows that $\alpha = 2$ & $\beta = 16$ and calculated as follows:
+$$
+\begin{align*}
+f(y) =& \frac{1}{8}ye^{-y^2/16}(1-y) \hspace{5mm}if\hspace{5mm}   0\leq y \leq \infty\\ 
+=& \frac{\alpha}{8}y^{\alpha-1}e^{-y^\alpha/\beta }(1-y) \hspace{5mm}if\hspace{5mm}   0\leq y \leq \infty\\ 
+\end{align*}
+$$
+
+
+
+### b
+The mean of the Weibull distribution is $\mu = 3.54492$ & the variance is $\sigma^2 = 3.433542$ and is calculated as follows:
+$$
+\begin{align*}
+\mu =& \beta^{1/\alpha} \Gamma (\frac{\alpha+1}{\alpha})\\
+     =& 16^{1/2} \Gamma (\frac{2+1}{2})\\
+     =& 3.54492
+     \\
+\sigma^2 =& \beta^{2/\alpha} [\Gamma(1+ \frac{2}{\alpha})-\Gamma^2(\frac{\alpha+1}{\alpha})] \\
+=& 16^{2/2} [\Gamma(1+ \frac{2}{2})-\Gamma^2(\frac{2+1}{2})] \\
+=& 3.433542\\
+\end{align*}
+$$
+
+
+### c
+The probability that the new memory chip will not fail before 6 years is $P(Y<6)= 0.894601$ and is calculated as follows:
+$$
+\begin{align*}
+P(Y<6) =& 1-e^{\frac{-6^2}{16}}\\
+=& 0.894601
+\end{align*}
+$$
+
+
+## Q 7
+
+
+### a
+The joint probability for **2** 6-sided dice would be $\frac{1}{6}\cdot\frac{1}{6}$ or $\frac{1}{36}$.
+
+
+### b
+The marginal probabilities for **2** 6-sided dice would be $\sum^6 \frac{1}{6} = \frac{6}{36}$ for both $p_1(x)$ & $p_2(y)$.
+
+
+### c
+For $P_1(x|y)$:
+$$
+\begin{align*}
+P_1(x|y) = \frac{p(x,y)}{p_2(y)} = \frac{1/36}{6/36} = \frac{1}{6}\\
+\end{align*}
+$$
+
+For $P_2(y|x)$:
+$$
+\begin{align*}
+P_2(y|x) = \frac{p(x,y)}{p_1(x)} = \frac{1/36}{6/36} = \frac{1}{6}\\
+\end{align*}
+$$
+
+
+
+### d
+It can be observed from parts **b** and **c** that X & Y are independent of each other, with equal probabilites for each outcome.
+
+
+
+
+## Q 8 
+
+### a
+The bivariate probability distribution is as follows, with X as columns and Y as rows:
+
+$$
+\begin{matrix}
+1 & 2 & 1\\
+0 & 0 & 2 \\
+0 & 0 & 1 
+\end{matrix}
+$$
+with a total number of 7 particles the probability distribution of $p(x,y)$ is:
+$$
+\begin{matrix}
+1/7 & 2/7 & 1/7\\
+0 & 0 & 2/7 \\
+0 & 0 & 1/7 
+\end{matrix}
+$$
+
+### b
+The marginals of the distribution is $p_1(x) = (1/7 , 2/7 , 4/7)$ and is shown as follows::
+$$
+\begin{matrix}
+1/7 & 2/7 & 1/7\\
+0 & 0 & 2/7 \\
+0 & 0 & 1/7 \\
+1/7 & 2/7 & 4/7
+\end{matrix}
+$$
+
+### c
+The marginals of the distribution is $p_2(x) = (4/7 , 2/7 , 1/7)$ and is shown as follows::
+$$
+\begin{matrix}
+1/7 & 2/7 & 1/7 &4/7 \\
+0 & 0 & 2/7 &  2/7\\
+0 & 0 & 1/7 &  1/7\\
+\end{matrix}
+$$
+
+### d
+We find that the conditional distribution $p_2(y|x)$ is:
+$$
+\begin{matrix}
+1& 1 & 1/4  \\
+0 & 0 & 1/2 \\
+0 & 0 & 1/4 \\
+\end{matrix}
+$$
+
+
+## Q 9
+
+### a
+For the given joint probability distribution, f(y) is:
+$$
+\begin{align*}
+f(y) =& \int_{-\infty}^{\infty} f(x,y)dx \\
+      =& \int_{y}^{2y} \frac{e^{-y/10}}{10y} dx \\
+      \\
+    f(y)  =& \frac{e^{-y/10}}{10} \\
+\end{align*}
+$$
+Yes, this is similar to a weibull distribution.
+
+### b
+The mean $E(y)$ is:
+$$
+\begin{align*}
+E(y) =& \int_{y} yf(y)dx \\
+      =& \int_{0}^{\infty} y\frac{e^{-y/10}}{10} dy \\
+      =& \big[ -(10+y)e^{-y/10} \big|_0^{\infty} dy \\
+      \\
+    E(y)  =& 10 \\
+\end{align*}
+$$
+
+
+## Q 10
+
+### a
+To find c we set the following to equal 1, and solve as follows:
+$$
+\begin{align*}
+1 =& \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)dxdy \\
+  =& \int_{0}^{x} \int_{0}^{\infty} ce^{-x^2}dxdy \\
+  =& c\int_{0}^{x}  \frac{\sqrt(\pi)}{2}dy \\
+1 =& c\frac{x\sqrt(\pi)}{2}
+      \\
+c =& \frac{2}{x\sqrt(\pi)}
+\end{align*}
+$$
+
+
+### b
+The marginal density is as follows:
+$$
+\begin{align*}
+f_1(x) =& \int_{-\infty}^{\infty}  f(x,y)dy \\
+=& \int_{0}^{x} \frac{2}{x\sqrt(\pi)}e^{-x^2}\\
+=& \big[  \frac{2y}{x\sqrt(\pi)}e^{-x^2}  \big|_0^x\\
+\\
+f_1(x)=&  \frac{2e^{-x^2} }{\sqrt(\pi)} 
+\end{align*}
+$$
+Next we show that 
+
+$$ 
+\begin{align*}
+1 = \int_{-\infty}^{\infty}f_1(x)dx
+\end{align*}
+$$
+
+
+$$
+\begin{align*}
+\int_{-\infty}^{\infty}f_1(x)dx =& \int_{-\infty}^{\infty}  \frac{2e^{-x^2} }{\sqrt(\pi)} dx \\
+=& \int_{0}^{x} \frac{2e^{-x^2} }{\sqrt(\pi)}\\
+=& \frac{2}{\sqrt(\pi)}\int_{0}^{x} e^{-x^2}\\
+=& \frac{2}{\sqrt(\pi)}(0.886227)\\
+\approx& 1 
+\end{align*}
+$$
+
+
+
+
+### c
+The equation for the conditional density of Y given X is:
+$$
+\begin{align*}
+f(y|x)dy =& \frac{f(x,y)}{f_1(x)} \\
+=& \frac{\frac{2e^{-x^2} }{x\sqrt(\pi)}}{\frac{2e^{-x^2} }{\sqrt(\pi)}} \\
+=& \frac{1}{x}
+\end{align*}
+$$\
+
+and can be as follows:
+
+$$
+\begin{align*}
+\int_{0}^{x}f(y|x)dy =& \int_{0}^{x} \frac{1}{x}dy \\
+=& 1
+\end{align*}
+$$
+
+
+
+
+## Q 11
+Below we see that $cov(X,Y) =0$ even though X & Y are dependant: 
+$$
+\begin{align*}
+cov(X,Y) =& E(XY) - \mu_x\mu_y\\
+\\
+E(XY) =&  (-1)(-1)(\frac{1}{12})+(-1)(0)(\frac{1}{12})+(-1)(1)(\frac{1}{12})\\
+      &   + (0)(-1)(\frac{2}{12})+(0)(0)(\frac{1}{12})+(0)(1)(\frac{1}{12}) \\
+      &   + (1)(-1)(\frac{1}{12}) +(1)(0)(\frac{1}{12})+(0)(1)(\frac{1}{12})  \\
+      =& 0\\
+      \\
+E(X)  =& (-1)(\frac{4}{12}) + (0)(\frac{4}{12}) + (1)(\frac{4}{12}) \\
+      =& 0 \\
+E(Y)  =& (-1)(\frac{4}{12}) + (0)(\frac{4}{12}) + (1)(\frac{4}{12}) \\
+      =& 0 \\    
+\\
+cov(X,Y) =& E(XY) - \mu_x\mu_y = 0 - (0)(0)\\\
+cov(X,Y) =& 0
+\end{align*}
+$$
+
+
+
+## Q 12
+
+### a
+
+The value for $E(\bar{Y})$ is **2** which is the mean of the uniform distribution or the *middle* as it is uniform:
+$$
+\begin{align*}
+E(\bar{Y}) = \bar{Y} = \frac{1+3}{2} = 2\\
+\end{align*}
+$$
+
+
+### b
+the variance is $Var(\bar{Y})  = \frac{1}{180}$:
+$$
+\begin{align*}
+Var(\bar{Y})  &= \frac{\sigma^2}{n} \\
+\\
+Where: &\\
+\sigma^2 &= \frac{(3-1)^2}{12}=\frac{1}{3}\\
+\\
+Var(\bar{Y})  &= \frac{\frac{1}{3}}{60} = \frac{1}{180} \\
+\end{align*}
+$$
+
+### c
+The mean of the sample and variance are finite and the sample size is 60, which follows $n\geq30$ for the central limit theorem, thus this is a normal sampling distribution of $\bar{Y}$.
+
+### d
+For $P(1.5<\bar{Y}<2.5)$:
+$$
+\begin{align*}
+P(1.5<\bar{Y}<2.5)  &= P \bigg( \frac{1.5-2}{\sqrt(0.0056)}< \frac{\bar{Y}-E(Y)}{\sqrt(Var(\bar{Y}))} <  \frac{2.5-2}{\sqrt(0.0056)}  \bigg) \\
+&=  P(-6.68<Z<6.68)\\
+&\approx 1
+\end{align*}
+$$
+
+
+### e
+For $P(\bar{Y}>2.2)$:
+$$
+\begin{align*}
+P(\bar{Y}>2.2)  &= P(Z> \frac{2.2-2}{\sqrt(0.0056)})\\
+&=P(Z>2.67)\\
+&=P(Z<-2.67)\\
+&\approx 0.0038
+\end{align*}
+$$
+
+
+
+
+## Q 13
+Given: $n=20$ & $p=0.40$
+$$
+\begin{align*}
+\mu =& np\\
+     =& (20)(0.4)\\
+     =& 8\\
+     \\
+\sigma =& \sqrt{np(1-p)}\\
+     =& \sqrt{(20)(0.4)(1-0.4)}\\
+     =& 2.19089\\
+\end{align*}
+$$
+
+### a
+The probability that fewer than 2 of the 20 swordfish pieces have exceeding mercury levels is $P(Y<2)=  0.0015$, where $q=1-p=0.6$:
+
+$$
+\begin{align*}
+P(Y<2) =& P \big( Z<\frac{2-0.5-np}{\sqrt{npq}}  \big)\\
+        =& P \big( Z<\frac{2-0.5-(20)(.4)}{\sqrt{(20)(.4)(.6)}}  \big)\\
+        =& P \big(Z< -2.968  \big)\\
+        =&  0.0015
+\end{align*}
+$$
+
+### b
+The probability that more than half of the 20 swordfish pieces have exceeding mercury levels is $P(Y>10)= 0.2483$:
+
+$$
+\begin{align*}
+P(Y>10) =& P \big( Z>\frac{10-0.5-np}{\sqrt{npq}}  \big)\\
+        =& P \big( Z>\frac{10-0.5-(20)(.4)}{\sqrt{(20)(.4)(.6)}}  \big)\\
+        =& P \big(Z> 0.68  \big)\\
+        =& 1-P\big(Z< 0.68  \big)\\
+        =& 1-0.751748\\
+        =& 0.2483\\
+\end{align*}
+$$
+
+### c
+From the binomial tables for the given values of $n=20$ and $p=0.4$, k is at 10 and the probability value is 0.8725; thus: $P(Y>10)= 0.1275$
+$$
+\begin{align*}
+P(Y>10) =&1- P(Y<110)\\
+        =&1- 0.8725\\
+        =& 0.1275
+\end{align*}
+$$
+Since this sample size is below 30 this is not a good approximation as can be seen above in parts a, b, & c.
+
+
+
+## Q 14
+
+### a
+```{r}
+lead <- read.csv(file = "LEADCOPP.csv")
+length(lead$LEAD)
+# Mean
+sum(lead$LEAD)/length(lead$LEAD)
+# Standard Dev.
+sd(lead$LEAD)
+```
+For lead $\bar{d}=2.8856$, $S_d = 3.924775$, and $n=10$; assuming two-tailed in the given *table 7* we find the the degrees of freedom are $\nu = 10-1=9$ thus $t_{\alpha/2} = \pm 2.262$:
+
+$$
+\begin{align*}
+Confidence\hspace{2.5mm} Interval =& \bigg(\bar{d}-t_{\alpha/2}(\frac{S_d}{\sqrt{n}}),  \bar{d}+t_{\alpha/2}(\frac{S_d}{\sqrt{n}})    \bigg)\\
+=& \bigg(2.8856-t_{\alpha/2}(\frac{3.924775}{\sqrt{10}}),  2.8856+t_{\alpha/2}(\frac{3.924775}{\sqrt{10}})    \bigg)\\
+=& \bigg(2.8856-2.262(\frac{3.924775}{\sqrt{10}}),  2.8856+2.262(\frac{3.924775}{\sqrt{10}})    \bigg)\\
+=& \bigg(0.07818016, 5.69302   \bigg)
+\end{align*}
+$$
+
+As can be seen above from R calculations as compared to hand calculations it is accurate to say the $99\%$ confidence interval is $(0.07818016, 5.69302 )$.
+
+### b
+For copper; using the same given values for $t_{\alpha/2}$ in part a the mean is $0.4083$ and the standard deviation is $0.2495187$:
+
+```{r}
+lead <- read.csv(file = "LEADCOPP.csv")
+length(lead$COPPER)
+# Mean
+sum(lead$COPPER)/length(lead$COPPER)
+# Standard Dev.
+sd(lead$COPPER)
+```
+
+
+$$
+\begin{align*}
+Confidence\hspace{2.5mm} Interval =& \bigg(\bar{d}-t_{\alpha/2}(\frac{S_d}{\sqrt{n}}),  \bar{d}+t_{\alpha/2}(\frac{S_d}{\sqrt{n}})    \bigg)\\
+=& \bigg(0.4083-2.262(\frac{0.2495187}{\sqrt{10}}),  0.4083+2.262(\frac{0.2495187}{\sqrt{10}})    \bigg)\\
+=&  \big( 0.2298175,  0.5867825 \big)
+\end{align*}
+$$
+
+As can be seen above from R calculations as compared to hand calculations it is accurate to say the $99\%$ confidence interval is $( 0.2298175,  0.5867825 )$.
+
+### c
+For part **a** the *Lead* level in water specimens from Crystal Lake Manors is in between $0.07818016$ & $5.69302$ with a confidence of $99\%$ that this is true.
+
+For part **b** the *Copper* level in water specimens from Crystal Lake Manors is in between $0.2298175$ & $0.5867825$ with a confidence of $99\%$ that this is true.
+
+### d
+The meaning behind the $99\%$ confidence interval is that we consider it to be almost perfectly accurate, yet there are still anomalies that must be considered, which is why there is a $1\%$ of uncertainty. 
+
+
+## Q 15
+Using R as a calculator it was found that the mean of the differences is $198$, as can be seen below:
+```{r}
+solar <- read.csv(file = "SOLARAD.csv")
+# n
+length(solar$STJOS)
+# Mean of diff
+stj <- solar$STJOS
+iow <- solar$IOWA
+q15.dif<-stj-iow
+sum(q15.dif)/length(q15.dif)
+
+```
+
+Next we find the standard deviation to be $44.52715$:
+```{r}
+# Standard Dev.
+sd(q15.dif)
+```
+
+and since we have degrees of freedom $\nu = 7-1 =6$ thus given this is two tailed $t_{\alpha/2} = \pm2.4469$. With all of this the confidence interval can be found as follows:
+
+$$
+\begin{align*}
+Confidence\hspace{2.5mm} Interval =& \bigg(\bar{d}-t_{\alpha/2}(\frac{S_d}{\sqrt{n}}),  \bar{d}+t_{\alpha/2}(\frac{S_d}{\sqrt{n}})    \bigg)\\
+=& \bigg(198-2.4469(\frac{44.52715}{\sqrt{7}}),  198+2.4469(\frac{44.52715}{\sqrt{7}})    \bigg)\\
+=&  \big( 156.8195,  239.1805 \big)
+\end{align*}
+$$
+
+
+### confidence interval
+The confidence interval was calculated to be $(156.8195, 239.1805)$; which means that, the solar radiation for both locations falls between $156.8195$ & $239.1805$ $\frac{BTU}{ft^2}$ with a confidence of $95\%$ which means that their is a possibility that this interval has a slight error. 
+
+## Q 16
+The confidence interval as calculated below was found to be $(14.33593,  63.48225)$:
+```{r}
+diaz <- read.csv(file = "DIAZINON.csv")
+# n
+length(diaz$DAY)
+# Mean of diff
+day <- diaz$DAY
+nit <- diaz$NIGHT
+q16.dif<-nit-day
+sum(q16.dif)/length(q16.dif)
+# Standard Dev.
+sd(q16.dif)
+```
+
+given that the degrees of freedom is $ \nu = 11-1=10$ wee find in the table that $t_{\alpha/2} = 2.228$.
+
+### a
+
+
+$$
+\begin{align*}
+Confidence\hspace{2.5mm} Interval =& \bigg(\bar{d}-t_{\alpha/2}(\frac{S_d}{\sqrt{n}}),  \bar{d}+t_{\alpha/2}(\frac{S_d}{\sqrt{n}})    \bigg)\\
+=& \bigg(38.90909-2.228(\frac{36.57987}{\sqrt{11}}),  38.90909+2.228(\frac{36.57987}{\sqrt{11}})    \bigg)\\
+=&  \big( 14.33593,  63.48225 \big)
+\end{align*}
+$$
+
+
+
+### b
+We assume that the populations are both **Normal** with equal variances $\sigma_1^2 = \sigma_2^2$.
+
+### c 
+It can be seen above that the diazinon residue levels do in fact differ from day to night as the interval itself is quit large. Given that this is a $90\%$ confidence interval it is also fairly accurate, thus the two data sets do in fact differ by a large margin.

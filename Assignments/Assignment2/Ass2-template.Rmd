@@ -1,0 +1,710 @@
+---
+title: 'ASsignment2'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questions{17/17}
+
+## Q 1{.tabset}
+
+### a
+Given that an expert examining a pair of matched prints has a success rate of $92.12\%$, then that would mean that an expert will have a probability of $7.88\%$ failing to identify the match. 
+
+### b
+Given a novice with matched prints, the probability of identification failure is $25.45\%$.
+
+### c
+The participant is most likely a **novice**; that would fail to identify a match. 
+
+
+
+## Q 2{.tabset}
+Given a population size of $1,000$ it is defined that $100$ of them are testesterone users, **users**, while the remainder $(900)$ are **non-users**. Within this population, $50$ **users** would test poistive while $9$ **non-users** would test negitive. 
+
+
+### a
+The probability that a **user** would test positive is:
+$$
+\begin{align*}
+P(Positive|User) = 50/100 = 0.50
+\end{align*}
+$$
+
+### b
+The probability that a **non-user** would test positive is:
+$$
+\begin{align*}
+P(Negative|Non-User) = (891)/900 =  0.99
+\end{align*}
+$$
+
+### c
+Given $P(User) = 0.10$, Baye's Rule states:
+$$
+\begin{align*}
+P(User| Positive) = \frac{P(Positive|User)\cdot P(User)}{P(Positive|User)\cdot P(User)+ P(Positive|Non-User)\cdot P(Non-User)}
+\end{align*}
+$$
+where:
+$$
+\begin{align*}
+P(Positive|Non-User) = 9/900 = 0.01
+\end{align*}
+$$
+it can then be Obtained that:
+$$
+\begin{align*}
+P(User| Positive)= \frac{(0.1)\cdot(0.5)}{(0.1)\cdot(0.5)+(0.9)\cdot(0.01)} = 0.8474576
+\end{align*}
+$$
+or The probability that a Player that tests **positive** is infact a **user** is $\approx 84.75\%$.
+
+
+## Q 3{.tabset}
+
+### Theorem 3.1
+"The Multiplicative Rule 
+You have *k* sets of elements; $n_1$ for the first set, $n_2$ for the second set..., and $n_k$ for the $k^{th}$ set. Suppose you want to form a sample of *k* elements by taking one element from each of the *k* sets. The number of different samples that can be formed is the product":
+$$
+\begin{align*}
+n_1n_2n_3&...n_k\\
+o&r\\ 
+\prod_{i = 1}^{k}& n_{i}
+\end{align*}
+$$
+
+### Proof
+The book builds a proof for $n_1n_2$ using pairings of $a_{n1}b_{n2}$ and a $2D$ Table to represent the possibilities. In order to prove this for *k* sets the proof must be elaborated upon:
+$$
+\begin{align*}
+\begin{bmatrix}
+    & b_1 & b_2 & ...   & b_{n2}\\
+a_1 & a_1b_1 & a_1b_2& ... & a_1b_{n2}  \\
+a_2 & a_2b_1 & a_2b_2&...  &...   \\
+... & ...    & ...& ...&    ...    \\
+a_{n1}&a_{n1}b_1&...&...&a_{n1}b_{n2}
+\end{bmatrix} \cdot 
+\begin{bmatrix}
+    & d_1 & d_2 & ...   & d_{nk}\\
+c_1 & c_1d_1 & c_1d_2& ... & c_1d_{nk}  \\
+c_2 & c_2d_1 & c_2d_2&...  &...   \\
+... & ...    & ...& ...&    ...    \\
+c_{n3}&c_{n3}d_1&...&...&c_{n3}d_{nk}
+\end{bmatrix}  
+\end{align*}
+$$
+These tables ellaborate on the books proof of $(n_1n_2)n_3=n_1n_2n_3$ to state that:
+$$
+\begin{align*}
+(n_1n_2n_3)...n_k = n_1n_2n_3...n_k 
+\end{align*}
+$$
+
+## Q 4{.tabset}
+
+### Theorem 3.2
+"Permutations Rule Given a single set of **N** distinctly different elements, you wish to select *n* elements from the **N** and  arrange them within *n* positions in a distinct order. The number of different permutations of the **N** elements taken *n* at a time is denoted buy $P^N_n$ and is equal to": 
+$$
+\begin{align*}
+P^N_n  = N(N-1)(N-2)...(N-n+1) = \frac{N!}{(N-n)!}
+\end{align*}
+$$
+
+### Proof
+Given, $P^N_n$, is *n* elements within **N**, and arranged in *n* positions. The total amount of distinct ways this will be able to happen first is **N** ways. Thus , we find the first position, of *n* positions, to be **N**, or:
+$$
+\begin{align*}
+P^N_n  = (N)...
+\end{align*}
+$$
+
+each subsequent position has 1 less then **N** amount of possible or distinct elements *n* to be chosen, thus if we want to fill the second position we have $N-1$ distinct elements that can be chosen. This follows for each one chosen as we work **withouth replacement**, thus the third position and subsequent positions to be filled will follows as $(N-2)(N-3)...$ such that:
+$$
+\begin{align*}
+P^N_n  = N(N-1)(N-2)...
+\end{align*}
+$$
+Here we must note that a $0$ trial is not desired and given the correct count, it can be determined that the last position can be filled by $(N-n+1)$ distinct ways, such that if $N=n$ then there is at minimum 1 distinct way:
+$$
+\begin{align*}
+P^N_n  = N(N-1)(N-2)...(N-n+1)
+\end{align*}
+$$
+Next we Use the **multiplicitivce rule** as follows, where $n! = n \times (n-1)!$:
+$$
+\begin{align*}
+P^N_n  =& N(N-1)(N-2)...(N-n+1) \cdot \frac{(N-n)!}{(N-n)!}\\
+       =& \frac{N(N-1)(N-2)...(N-n+1) \cdot(N-n)!}{(N-n)!}\\
+       =&  \frac{N!}{(N-n)!}
+\end{align*}
+$$
+Thus:
+$$
+\begin{align*}
+P^N_n  =  \frac{N!}{(N-n)!}
+\end{align*}
+$$
+
+## Q 5{.tabset}
+
+### Theorem 3.3
+Partitions Rule: There exsists a single set of **N** distinctly diffrent elements and you want to partition them into *k* sets, the first set contianing $n_1$ elements, the second containt $n_2$ elemetns ... and the $k^{th}$ set containing $n_k$ elements. The number of different partitions is:
+$$
+\begin{align*}
+A = \frac{N!}{n_1!n_2!...n_k!}\hspace{10mm} \textit{where:}\hspace{5mm} n_1+n_2+...+n_k = N 
+\end{align*}
+$$
+
+
+
+### Proof
+By the use of **Theorem 3.2** we can say that:
+$$
+\begin{align*}
+P^N_N = \frac{N!}{(N-N)!} = \frac{N!}{0} = N!
+\end{align*}
+$$
+Next by using **Theorem 3.1** 
+$$
+\begin{align*}
+P^N_N = N! = (A)(n_1!)(n_2!)...(n_k!)
+\end{align*}
+$$
+Thus:
+$$
+\begin{align*}
+\frac{N!}{(n_1!)(n_2!)...(n_k!)} = (A)
+\end{align*}
+$$
+
+## Q 6{.tabset}
+
+
+
+### Theorem 3.4
+The Combinations Rule: A sample of *n* elements is to be chosen from a set of **N** elements. Then the number opf different samples of *n* elements that can be selected from **N** is denoted by 
+$$
+\begin{pmatrix} 
+N\\
+n
+\end{pmatrix}
+$$
+and is equal to:
+$$
+\begin{pmatrix} 
+N\\
+n
+\end{pmatrix} = \frac{N!}{n!(N-n)!}
+$$
+
+### Proof
+The proof utilizes **theorem 3.3**
+$$
+\begin{align*}
+\frac{N!}{(n_1!)(n_2!)...(n_k!)}
+\end{align*}
+$$
+Where selection of *n* elements from a set of *N* elements is the same as partitioning the *N* into the $K=2$ groups such that:
+$$
+\begin{align*}
+ \begin{pmatrix}N\\n \end{pmatrix} = \frac{N!}{(n_1!)(n_2!)} = \frac{N!}{n!(N-n)!}
+\end{align*}
+$$
+
+
+## Q 7{.tabset}
+
+### a 
+The probabilities for *y* in the table does sum to equal 1
+```{r}
+0.09+0.30+0.37+0.20+.04
+```
+
+
+### b
+The probability of 3 or 4 homes, $P(3\cup4)P(y=3)+P(y=4)$, is $0.24$. 
+```{r}
+.2+0.04
+```
+
+
+### c
+The probability of fewer thena 2 homes, $P(y<2) = P(y=0)+P(y=1)$, is $0.39$
+```{r}
+0.3+.09
+```
+
+
+
+## Q 8{.tabset}
+
+### a
+Checking that this is a discrete random variable distribution, or the summation of the probabilities is 1, we fins that it does satisfy the properties:
+```{r}
+.17+.1+.11+.11+.1+.1+.07+.05+.03+.02+.02+.02+.02+.02+.01+.01+.01+.01+.01+.005+.005
+```
+
+
+### b
+For the probability $P(Y\geq10)$ it can be seen that the probability is $0.14$:
+```{r}
+Q8.B.prob<- c(.17, .1,.11,.11,.1,.1,.07,.05,.03,.02,.02,.02,.02,.02,.01,.01,.01,.01,.01,.005,.005)
+Q8.B.num <- c(0:20)
+Q8.B.tab <- data.frame(Q8.B.num,Q8.B.prob)
+Q8.B.tab
+```
+
+
+```{r}
+Q8.B.tab.answer <- Q8.B.tab[11:21,]
+sum(Q8.B.tab.answer)
+```
+
+
+### c
+The mean is, $\mu = E(Y)=\sum y\cdot p(y) = 4.655$:
+```{r}
+0*.17+1*.1+2*.11+3*.11+4*.1+5*.1+6*.07+7*.05+8*.03+9*.02+10*.02+11*.02+12*.02+13*.02+14*.01+15*.01+16*.01+17*.01+18*.01+19*.005+20*.005
+```
+The variance is, $\sigma^2 = V(Y)=\sum y^2\cdot p(y) - \mu^2 = 19.85597$
+```{r}
+0^2*.17+1^2*.1+2^2*.11+3^2*.11+4^2*.1+5^2*.1+6^2*.07+7^2*.05+8^2*.03+9^2*.02+10^2*.02+11^2*.02+12^2*.02+13^2*.02+14^2*.01+15^2*.01+16^2*.01+17^2*.01+18^2*.01+19^2*.005+20^2*.005 - 4.655^2
+```
+
+
+### d
+The interval from Chebyshev's Rule can be used for $\frac{3}{4}$ or $0.75$ probability; which states $(\mu \pm 2\sigma)$. Thus the interval is:
+$$
+(-4.257008,13.56701)
+$$
+
+
+
+```{r}
+4.655 - 2*sqrt(19.85597)
+4.655 + 2*sqrt(19.85597)
+```
+
+
+
+## Q 9{.tabset}
+
+### a
+Given that $70\%$ of graduate students who earn PhD s in the U.S. are foreign nationals. Consider the number *Y* of foreign students in a sample of 25 students who just received their PhD.
+$$
+\begin{align*}
+P(Y=10) = 0.001324897
+\end{align*}
+$$
+```{r}
+dbinom(10,25,0.70)
+```
+
+
+### b
+$$
+\begin{align*}
+P(Y\leq 5) = 3.457444\times 10^{-7}
+\end{align*}
+$$
+```{r}
+pbinom(5,25,.7)
+```
+
+### c
+For $p=0.70$, $q=0.30$, and $n=25$; we find that the mean is $\mu=np$ & the standard deviation is $\sigma = npq$.
+$$
+\begin{align*}
+\mu = 17.5\\
+\sigma = 5.25
+\end{align*}
+$$
+```{r}
+25*.7
+25*.7*.3
+```
+
+
+
+### d
+Here we see that 17.5, or roughly 18, foreign students earn their PhD out of 25 total students in the U.S., with a standard deviation of 5.25 of the mean.  
+
+
+
+## Q 10{.tabset}
+Assuming that their are 10 train tracks, ways of assignment, and 50 trains, **N**, that need to be assign to each track:
+
+
+### a 
+The probability that 5 trains will be assigned to the same track is $p = 4.912046\times 10^{-7}$ or approximately $0.0000004912$. 
+
+$$
+\begin{align*}
+p =& \frac{\frac{N!}{n_1!n_2!....n_{10}!}}{10^{50}}\\
+p =& \frac{50!}{5!\cdot5!\cdot5!\cdot5!\cdot5!\cdot5!\cdot5!\cdot5!\cdot5!\cdot5!}\\
+
+\end{align*}
+$$
+
+```{r}
+factorial(50)/(factorial(5)*factorial(5)*factorial(5)*factorial(5)*factorial(5)*factorial(5)*factorial(5)*factorial(5)*factorial(5)*factorial(5))/(10^(50))
+```
+
+### b
+to fins out if **track 1** is underutilized, we examine the probability of track assignment; $prob = \frac{1}{10} = 0.1$. The probability that 2 or fewer trains are assigned is $P(Y<2)$ which is:
+```{r}
+pbinom(1,50,.1)
+```
+or 
+$$
+\begin{align*}
+P(Y<2) = 0.03378586
+\end{align*}
+$$
+
+
+## Q 11{.tabset}
+
+### a
+Besides reading a product label there is:
+```{r}
+Percentage <- c(12,6,4,18)
+Reason     <- c("Read about product", "Advertisment", "Brand Website", "Other")
+Grean.Q11  <-data.frame(Reason,Percentage)
+Grean.Q11
+Prob <- (sum(Grean.Q11$Percentage))/100
+Prob
+```
+considering the probability of *Y* is 0.4, thus the formula for the probability distribution of *Y* is  is given as follows:
+$$
+\begin{align*}
+P(Y=k) = p(1-p)^{k-1}
+\end{align*}
+$$
+ 
+### b
+$$
+\begin{align*}
+E(Y) = \frac{1}{p} = \frac{1}{0.4} = 2.5
+\end{align*}
+$$
+These results show the mean of *Y* whihc is the percentage of consumer interactions outside of product labels. 
+
+### c
+$P(Y=1) = 0.4$
+$$
+\begin{align*}
+P(Y=1) = 0.4(1-0.4)^{1-1} = 0.4
+\end{align*}
+$$
+
+### d
+$P(Y >2) = 0.36$
+$$
+\begin{align*}
+P(Y >2) = 1 - (0.4(1-0.4)^{1-1} + 0.4(1-0.4)^{2-1}) = 0.36
+\end{align*}
+$$
+
+## Q 12{.tabset}
+Of $209$ U.S. facilities, **N**, and only $8$ of them,*r*, treat their waste on site:
+
+### a
+In a random sample of $n =10$, the expectation value or mean,  is given as:
+$$
+\begin{align*}
+\mu = \frac{nr}{N} = \frac{10\cdot8}{209} = 0.3827751
+\end{align*}
+$$
+These results show that out of the ten of the facilities $0.38$ of the facilities, or a maximum of **one**, treat their waste.
+
+### b
+The probability that 4 of the 10 sites treat their waste on site is $P(Y=4)=0.01688459\%$ and ios calculated below:
+$$
+\begin{align*}
+P(Y=y) = \frac{\begin{pmatrix} r\\y  \end{pmatrix}  \begin{pmatrix}  N-r\\n-y \end{pmatrix}  }{\begin{pmatrix} N\\n  \end{pmatrix}}
+\end{align*}
+$$
+$$
+\begin{align*}
+P(Y=4) = \frac{\begin{pmatrix} 8\\4  \end{pmatrix}  \begin{pmatrix}  209-8\\10-4 \end{pmatrix}  }{\begin{pmatrix} 209\\10  \end{pmatrix}} = \frac{(70)(84944276340)}{(3.521613\times 10^{16})} =0.0001688459
+\end{align*}
+$$
+
+
+## Q 13{.tabset}
+
+### a
+As this is **Poisson** the mean equals the variance thus $V(Y) = 0.03$
+
+### b
+1) The experiment is counting how many times an event *Y* occurs over the course of time, or an area or volume.
+
+2) The probability that an event occurs in a time, area, or volume unit is the same for all units. Units are also mutually exclusive. 
+
+3) The number of events that occur in one unit of time, are, or volume is independent of the number that occur in other units 
+
+### c
+Given:
+$$
+\begin{align*}
+p(y) = \frac{\lambda^y*e^{-y}}{y!}
+\end{align*}
+$$
+For no casulaties:
+$$
+\begin{align*}
+p(0) = \frac{0.03^0*e^{-0}}{0!} = 0.970446
+\end{align*}
+$$
+
+
+## Q 14{.tabset}
+
+### a
+$$
+\begin{align*}
+\int_{-\infty}^{\infty} f(y) dy = 1 \longrightarrow \int_{0}^{1} c(2-y)dy =& 1\\
+\\
+c \bigg[2y - \frac{y^2}{2} \bigg|^1_0 =& 1\\
+c \bigg[2 - \frac{1}{2} \bigg] =& 1\\
+c \frac{3}{2} =& 1\\
+c  =& \frac{2}{3}
+\end{align*}
+$$
+Thus $c = 2/3$
+
+
+### b
+$$
+\begin{align*}
+F(y) &= \int_{-\infty}^{y} f(y) dt \\
+     &= \int_{0}^{y} \frac{2}{3}(2-t) dt \\
+    &= \frac{2}{3} \bigg[2t - \frac{t^2}{2} \bigg|^y_0 \\
+    &=  \frac{2}{3} (2y - \frac{y^2}{2}) \\
+\end{align*}
+$$
+
+Thus:
+$$
+\begin{align*}
+F(y) = \begin{cases} 
+0 && if &y\leq0 \\
+\frac{2}{3} (2y - \frac{y^2}{2}) && if & 0<y\leq1 \\
+1 && if & y>1 
+\end{cases}
+\end{align*}
+$$
+### c
+Given $F(0.4)$:
+$$
+\begin{align*}
+F(0.4) = \frac{2}{3} (2\cdot0.4 - \frac{0.4^2}{2}) =0.48
+\end{align*}
+$$
+Thus: 
+$F(0.4)=0.48$
+
+### d
+Given $P(0.1\leq Y\leq0.6)$:
+$$
+\begin{align*}
+P = \frac{2}{3} (2\cdot0.6 - \frac{0.6^2}{2}) -\frac{2}{3} (2\cdot0.1 - \frac{0.1^2}{2}) =0.55
+\end{align*}
+$$
+Thus:
+$P(0.1\leq Y\leq0.6)=0.55$
+
+## Q 15{.tabset}
+
+### a
+The mean is given as:
+$$
+\begin{align*}
+E(Y) =& \int_{-\infty}^{\infty}yf(y)dy\\ 
+      =& \int_{-5}^{5}y(\frac{3}{500}(25-y^2))dy\\ 
+      =& \bigg[ -\frac{3y^4}{2000}+\frac{3y^2}{40} \bigg|^5_{-5}\\ 
+      =& 0
+\end{align*}
+$$
+Next the variance:
+$$
+\begin{align*}
+E(Y^2) =& \int_{-\infty}^{\infty}y^2f(y)dy\\ 
+      =& \int_{-5}^{5}y^2(\frac{3}{500}(25-y^2))dy\\ 
+      =& \bigg[ -\frac{3y^5}{2000}+\frac{y^3}{20} \bigg|^5_{-5}\\ 
+      =& 5 \\
+      \\
+  V(Y)=& E(Y^2)-E(Y)^2 \\
+      =& 5-0^2\\
+      =& 5
+\end{align*}
+$$
+Thus $\mu = 0$ and $\sigma^2 = 5$
+
+
+### b
+for hours late we find:
+$$
+\begin{align*}
+z = \frac{Y}{60}
+\end{align*}
+$$
+$$
+\begin{align*}
+E(z) = E(\frac{Y}{60}) =& \frac{1}{60}E(Y) = 0
+\\
+\&\\
+V(z) = \frac{1}{60^2}V(Y) =& \frac{1}{60^2}(5) = \frac{1}{720}
+\end{align*}
+$$
+Thus $E(z) = 0$ and $V(z) =\frac{1}{720}$
+
+
+### c
+First we define $W = 60Y$
+$$
+\begin{align*}
+E(W) =& E(60Y)\\ 
+     =& 60\cdot E(Y)\\ 
+     =& 0\\ 
+      \\
+  V(W)=& V(60Y) \\
+      =& 60^2V(Y)\\
+      =& 60^2\cdot5\\
+      =& 18000
+\end{align*}
+$$
+Thus $E(W) = 0$ and $V(W) =18000$
+
+## Q 16{.tabset}
+Assuming the distribution is normal:
+$$
+\begin{align*}
+Z = \frac{Y-\mu}{\sigma} \sim N(0,1)
+\end{align*}
+$$
+
+### a
+The probability the level exceeds 45 milligrams per liter is $P(Y>45) =0.9409$.
+$$
+\begin{align*}
+P(Y>45) &= 1 - P(Y\leq45) \\
+        &= 1 - P(\frac{Y-\mu}{\sigma} \leq \frac{45-50}{3.2})\\
+        &= 1 - P(z \leq -1.5623)\\
+        &= 1 - 0.0591\\
+        &= 0.9409
+\end{align*}
+$$
+
+### b
+The probability the level is below 55 milligrams per liter is $P(Y<55) =0.9409$.
+$$
+\begin{align*}
+P(Y<55) &= P(\frac{Y-\mu}{\sigma} \leq \frac{55-50}{3.2})\\
+        &= P(z < 1.5623)\\
+        &= 0.9409
+\end{align*}
+$$
+
+
+### c
+The probability that the level is between 51 and 52 milligrams per liter is  $P(51<Y<52) = 0.1113$.
+$$
+\begin{align*}
+P(51<Y<52) &= P(\frac{51-50}{3.2}  < \frac{Y-\mu}{\sigma} < \frac{52-50}{3.2})\\
+        &= P(0.3125<z < 0.625)\\
+        &= P(z < 0.625) - P(z<0.3125)\\
+        &= 0.7340 - 0.6227   \\
+        &= 0.1113
+\end{align*}
+$$
+
+
+
+
+## Q 17{.tabset}
+$\mu=605$ and $\sigma=185$
+
+### a
+It was found that: $P(500<Y<700)= 0.4110$
+$$
+\begin{align*}
+P(500<Y<700) &= P(\frac{500-605}{185}  < \frac{Y-\mu}{\sigma} < \frac{700-605}{185})\\
+        &= P(-0.5676 <z < 0.5135)\\
+        &= P(z < 0.5135) - P(z<-0.5676)\\
+        &= 0.6962 - 0.2852   \\
+        &= 0.4110
+\end{align*}
+$$
+
+### b
+It was found that: $P(400<Y<500)= 0.1512$
+$$
+\begin{align*}
+P(500<Y<700) &= P(\frac{400-605}{185}  < \frac{Y-\mu}{\sigma} < \frac{500-605}{185})\\
+        &= P(-1.1081 <z < -0.5676)\\
+        &= P(z < -0.5676) - P(z<-1.1081)\\
+        &=  0.2852 - 0.1339   \\
+        &= 0.1512
+\end{align*}
+$$
+
+### c
+It was found that: $P(Y<850)= 0.9073$
+$$
+\begin{align*}
+P(500<Y<700) &= P(\frac{Y-\mu}{\sigma} < \frac{850-605}{185})\\
+        &= P(z < 1.3243)\\
+        &= 0.9073
+\end{align*}
+$$
+
+### d
+It was found that: $P(Y>1000)= 0.0164$
+$$
+\begin{align*}
+P(Y>1000) &= P( \frac{Y-\mu}{\sigma} > \frac{1000-605}{185})\\
+        &= P(z > 2.1351)\\
+        &= 1 - P(z < 2.1351)\\
+        &= 1 - 0.9836   \\
+        &= 0.0164
+\end{align*}
+$$
+
+### e
+It was found that the rating after 10% is: $\chi_o= 841.8$
+$$
+\begin{align*}
+0.90 &= P( \frac{Y-\mu}{\sigma} > \frac{\chi_o-605}{185})\\
+0.90 &= P( z > \frac{\chi_o-605}{185})\\
+0.90 &= P( z > z_o)\\
+0.10 &= 1-p(0<z<z_o)\\
+0.10 &= 1-p(z\leq z_o)\\
+1.28 &= z_o
+\end{align*}
+$$
+where $\frac{\chi-\mu}{\sigma} = z$
+$$
+\begin{align*}
+1.28 &= \frac{\chi_o-605}{185}\\
+\chi_o &= 841.8
+\end{align*}
+$$
+
+
+

@@ -1,0 +1,612 @@
+---
+title: "Assignment-1"
+author: "Evan_Blosser"
+date: "2023-07-12"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# packages
+library(ggplot2)
+# Functions
+# https://www.statology.org/mode-in-r/
+find_mode <- function(x) {
+  u <- unique(x)
+  tab <- tabulate(match(x, u))
+  u[tab == max(tab)]
+}
+```
+
+### Total Questions Answered: 15/15  
+
+# Question 1
+* There is a total of 4 assignments that are 5% each, with a total value of 20%
+* Labratories are a total of 10%
+* In Class Quizzes are worth 10%
+* The Chapter Quizzes found on CANVAS are worth 10%
+* The Project is worth a total of 10%
+* The Mid -Term Exam is worth 10%
+* The Final is worth 30%
+* The Grading Scale is as follows:(No Curving) 
+  + A  100% - 90% 
+  + B  89%  - 80% 
+  + C  79%  - 60% 
+  + D  59%  - 50% 
+  + F  <50%
+
+# Question 2
+```{r}
+ddt <- read.csv(file = "DDT.csv")
+head(ddt)
+```
+
+```{r}
+miletab <- ddt$MILE
+summary(miletab)
+miletab
+```
+
+## a
+```{r}
+m=with(ddt, as.numeric(factor(MILE)))
+length(unique(m))                     
+colm=c(m)                              
+coplot(LENGTH~WEIGHT|RIVER*SPECIES,data=ddt,pch=colm, col=colm)
+```
+
+## b
+The lower left three show **CCATFISH** within the **RIVERS**: **FCM**, **LCM**, **SCM**. The plots show the Varying **MILE** variable by color and shape of each data point. The x-axis shows that most of the **CCATFISH** are within roughly $500$ to $1500$; with an outlier (below $500$) of this being found in **FCM**. This outlier, or lighter **CCATFISH** is also the smallest in **LENGTH** as can be seen on the y-axis. One observation is that **FCM** also had the greatest **LENGTH** above $50$ 
+
+## c
+The given line of code, #A, sets 'm' to be a numeric vector of **MILE** found within ddt
+
+## d
+The given line of code, #B, asks for the length of the unique elements of m  
+
+## e
+These plots are empty as there are no **LMBASS** or **SMBUFFALO** within the **RIVERS**: **FCM**, **LCM**, **SCM**. 
+
+## f
+As shown below the mean value is $45$. 
+```{r}
+answer2f <- subset(ddt,RIVER=="FCM" & SPECIES=="CCATFISH",)
+Answer2fddt <- answer2f$DDT
+mean(Answer2fddt)
+summary(answer2f)
+```
+
+
+# Question 3 
+classify the following variables as qualitative or quantitative 
+
+## a
+Length of maximum span (in ft.): quantitative
+
+## b
+Number of vehicle lanes: quantitative
+
+## c
+Toll bridge (Yes or No): qualitative
+
+## d
+Average daily traffic: quantitative
+
+## e
+Condition of deck (good, fair, or poor): qualitative
+
+## f
+Bypass or detour length (miles): quantitative
+
+## g
+Route type (Interstate, US, etc...): qualitative
+
+
+# Question 4
+
+## a
+There is **simple random sampling**; as well as **stratified random sampling**, **cluster sampling**, **systematic sampling**.
+
+## b
+* simple random sampling
+  + Is a method of taking samples of an **n** size in such a way that each sample has the same probability of selection. this is usually done with simple randomizing programs.
+* stratified random sampling
+  + Is a method of separating the population, given at least two or more groups of units, into what are known as **strata**. These **strata** for example can be used  in experiments to stratify parameters of an experiment such as posted speed     limits on vehicle travel time surveys.  
+* cluster sampling
+  + This method uses **natrual groupings** or clusters of experimental units for sampling a population
+* systematic sampling
+  + This method uses a systematic approach, such as defining a rule of selecting every$k^{th}$ experimental unit from a list of all units.
+
+# Question 5
+
+```{r}
+mtbe=read.csv("MTBE.csv", header=TRUE) 
+head(mtbe) 
+# rows and columns
+dim(mtbe)
+# random indices
+```
+
+The 5 chosen wells are as follows:
+```{r}
+Random_mtbe=sample(1:223,5,replace=FALSE) 
+mtbe[Random_mtbe,]
+```
+
+
+## a
+
+### i
+```{r}
+mtbeo=na.omit(mtbe)
+head(mtbeo)
+```
+
+### ii
+The standard deviation of **Bedrock** Aquifier's **DEPTH** is $\approx 56.4536$ 
+```{r}
+# Filter list & take only depth values
+depth=mtbeo[mtbeo$Aquifier=="Bedrock",]$Depth
+sd(depth)
+```
+
+# Question 6
+
+```{r}
+earthquake <- read.csv(file='EARTHQUAKE.csv')
+head(earthquake)
+dim(earthquake)
+```
+The following 30 aftershocks were chosen:
+```{r}
+Random_earth = sample(1:2929,30,replace=FALSE)
+earthquake[Random_earth,]
+```
+
+## a
+
+### i
+
+```{r}
+plot(ts(earthquake$MAG),main="Plot of Earthquake Magnitudes",xlab="Time",ylab="Magnitude") 
+```
+
+
+### ii
+The median of the variable **MAGNITUDE** is **2**.
+```{r}
+median(earthquake$MAGNITUDE)
+
+```
+
+
+# Question 7
+
+## a
+This would be **Cluster Sampling** colleciton method.
+
+## b
+The population is the **Tennessee River**.
+
+## c
+The **Capture Location** and **Species** as stated in the text. However within capture location the **River** is the main qualitative variable, while the **Mile** is quantitative. 
+
+
+# Question 8
+
+## a
+The graph used on **Page 26** is a **Bar Graph**.
+
+## b
+The variable measured was **Robot Mode of Transportation** to see if they had **Legs**, **Wheels**, **None**, or **Both**.
+
+## c
+The graph on **Page 26** shows that robots with **Legs** are the current social design; as there were **63** of the **106** robots with **Legs**.
+
+## d
+The class relative frequency of **Robots with Legs Only** is: $\approx 0.59434$
+```{r}
+63/106
+```
+
+The class relative frequency of **Robots with Wheels Only** is: $\approx 0.18868$
+```{r}
+20/106
+```
+
+The class relative frequency of **Robots with None** is:$\approx 0.14151$
+```{r}
+15/106
+```
+
+The class relative frequency of **Robots with Both** is: $\approx 0.07547$
+```{r}
+8/106
+```
+
+## e
+
+```{r}
+pareto<-function(x,mn="Pareto barplot",...){  # x is a vector
+x.tab=table(x)
+xx.tab=sort(x.tab, decreasing=TRUE,index.return=FALSE)
+cumsum(as.vector(xx.tab))->cs
+length(x.tab)->lenx
+bp<-barplot(xx.tab,ylim=c(0,max(cs)),las=2)
+lb<-seq(0,cs[lenx],l=11)
+axis(side=4,at=lb,labels=paste(seq(0,100,length=11),"%",sep=""),las=1,line=-1,col="Blue",col.axis="Red")
+for(i in 1:(lenx-1)){
+segments(bp[i],cs[i],bp[i+1],cs[i+1],col=i,lwd=2)
+}
+title(main=mn,...)
+
+}
+```
+
+```{r}
+Robots=c(15,8,63,20)
+RobotType=c("None","Both","LegsO","WheelsO")
+Q8Data=rep(RobotType,Robots)
+
+pareto(x = Q8Data)
+```
+
+
+# Question 9
+```{r}
+Micsoft_program = c("Office","Windows","Explorer")
+Micsoft_data = c(12,32,6)
+```
+
+
+
+## a
+As can be seen below, the product of with the lowest security risk was **Explorer** in 2012.
+```{r}
+pie(x = Micsoft_data,labels = Micsoft_program)
+```
+
+
+```{r}
+Micsoft_matrix <- matrix(c(6,8,22,3,11), ncol = 1)
+rownames(Micsoft_matrix) <- c("Denial","Disclosure","Remote Code Exe.","Spoofing", "Privilage")
+colnames(Micsoft_matrix) <- ("Reports")
+Micsoft_matrix
+```
+
+
+
+
+## b
+As can be seen below, Microsoft should focus on **Remote Code Execution** repercussions.
+```{r}
+Micsoft_cat = c("Denial","Disclosure","Remote Code Exe.","Spoofing", "Privilage")
+Micsoft_reports = c(6,8,22,3,11)
+
+Q9BData=rep(Micsoft_cat,Micsoft_reports)
+pareto(x = Q9BData)
+```
+
+
+# Question 10
+The following 3D pie chart shows that the majority of the software is not defective. Furthermore, it was found that only $\approx 10\%$ of the code was defective.
+```{r}
+library(plotrix)
+swd <- read.csv(file = "SWDEFECTS.csv")
+tab=table(swd$defect)
+rtab=tab/sum(tab)
+round(rtab,2)
+pie3D(rtab,labels=list("OK","Defective"),main="pie plot of SWD")
+```
+
+
+# Question 11
+```{r}
+volt_data <- read.csv(file="VOLTAGE.csv")
+head(volt_data)
+```
+## a
+```{r}
+# Range of the VOLTAGE
+range(volt_data$VOLTAGE)
+```
+The following is the tabled filled out for the histogram construction:
+```{r}
+Voltdf <- read.csv(file="VOLTHIST.csv")
+Voltdf
+```
+
+
+The following is the constructed relative frequency histogram for 'old process' voltage readings:
+```{r}
+voltage_old <- with(volt_data, volt_data[LOCATION=="OLD",])
+# Histogram setup:
+classrange=10.6-8.0
+inc=classrange/9
+bins=seq(8.0,10.6,by=inc)
+# 
+with(voltage_old,cut(VOLTAGE,bins))
+cl= with(voltage_old,cut(VOLTAGE,bins))
+#
+# Frequency
+cl.tab=table(cl)
+cl.tab
+# 
+voltage_old$VOLTAGE->voltage_old
+length(voltage_old)
+n=length(voltage_old)
+#
+# Relative Frequency
+Rel_freq_old = cl.tab/n
+Rel_freq_old
+#
+## Main Plot
+barplot(Rel_freq_old,las=2,main="Relative Frequency Histogram",ylab="Relative frequency",space=0)
+
+```
+
+
+## b
+The following is the Stem & Leaf plot using **stem()** in **R**. It seems that the Histogram from part **a** can give a more visual representation of where the voltage readings lie. However, both give a fairly accurate representation of the distribution.
+```{r}
+stem(voltage_old)
+```
+
+
+## c
+The following is the constructed relative frequency histogram for 'New process' voltage readings:
+```{r}
+voltage <- with(volt_data, volt_data[LOCATION=="NEW",])
+# Histogram setup:
+classrange=10.6-8.0
+inc=classrange/9
+bins=seq(8.0,10.6,by=inc)
+# 
+cl= with(voltage,cut(VOLTAGE,bins))
+#
+# Frequency
+cl.tab=table(cl)
+cl.tab
+# 
+voltage$VOLTAGE->voltage
+n=length(voltage)
+#
+# Relative Frequency
+Rel_freq = cl.tab/n
+Rel_freq
+#
+## Main Plot
+barplot(Rel_freq,las=2,main="Relative Frequency Histogram",ylab="Relative frequency",space=0)
+
+```
+
+## d
+Given that a "good process" is a voltage reading of at least 9.2 volts, it can be seen that the **NEW** location is not as optimal as the **OLD**. The **NEW** location has a central tendency that falls on the minimum requirment of $9.2$ Volts. Furthermore it can be seen that a larger portion of the readings at the **NEW** location fall below the minimum voltage requirement as compared to the **OLD**. 
+```{r}
+layout(matrix(c(1,2),nr=1,nc=2))# 1 row 3 cols
+barplot(Rel_freq,las=2,main="NEW",ylab="Relative frequency",space=0)
+barplot(Rel_freq_old,las=2,main="OLD",ylab="Relative frequency",space=0)
+```
+
+## e
+My preferred method for finding the central tendency would be the mean, but double checking with the median. This is because for the most part the mean can accurately depict the central tendency, but some outliers may skew this. That's why double checking with the median is a good option.
+
+The following is the **OLD**:
+```{r}
+mean(voltage_old)
+median(voltage_old)
+find_mode(voltage_old)
+```
+The following is the **NEW**
+```{r}
+mean(voltage)
+median(voltage)
+find_mode(voltage)
+```
+
+## f
+The z-score of the **OLD** location is N/A.
+```{r}
+volt_10_old <- with(volt_data, volt_data[VOLTAGE>=10.5 & LOCATION=="OLD",])
+head(volt_10_old)
+z <- (volt_10_old$VOLTAGE-mean(volt_10_old$VOLTAGE))/sd(volt_10_old$VOLTAGE)
+z
+```
+
+## g
+The z-score of the **NEW** location is $0$.
+```{r}
+volt_10_new <- with(volt_data, volt_data[VOLTAGE>=10.5 & LOCATION=="NEW",])
+head(volt_10_new)
+z <- (volt_10_new$VOLTAGE-mean(volt_10_new$VOLTAGE))/sd(volt_10_new$VOLTAGE)
+z
+```
+
+## h
+The **OLD** location is more likley; as the **NEW** location seems to not have a reading of $10.5$ or above.
+
+## i
+Yes, there seem to be several possible outliers.
+```{r}
+boxplot(voltage_old,ylab="VOLTAGE",col="Blue",notch=TRUE)
+```
+
+
+## j
+The z-scores detected that $8.05$ is an outlier for the **OLD** location; with $8.72$ being a possible outlier:
+```{r}
+z <- (voltage_old-mean(voltage_old))/sd(voltage_old)
+z
+# Find the z values greater than 3 in size
+z[abs(z)>3]
+
+# Find the I values corresponding to these z values
+voltage_old[abs(z)>3]
+
+# Find the values of z that are possible outliers
+z[abs(z)>=2 & abs(z)<=3]
+
+#Find the values of I which are possible outliers
+voltage_old[abs(z)>=2 & abs(z)<=3]
+```
+
+
+## k
+No, there seems to be no significant outlier.
+```{r}
+boxplot(voltage,ylab="VOLTAGE",col="Blue",notch=TRUE)
+```
+
+## l
+The z-scores did **NOT** detect any outliers at the **NEW** location:
+
+```{r}
+z <- (voltage-mean(voltage))/sd(voltage)
+z
+# Find the z values greater than 3 in size
+z[abs(z)>3]
+
+# Find the I values corresponding to these z values
+voltage[abs(z)>3]
+
+# Find the values of z that are possible outliers
+z[abs(z)>=2 & abs(z)<=3]
+
+#Find the values of I which are possible outliers
+voltage[abs(z)>=2 & abs(z)<=3]
+```
+
+## m
+As can be seen below the **NEW** location has practically no outliers as compared to the **OLD** location. However a larger portion of the **NEW** voltage readigns fall below the minimum requirment as stated in the problem statemnt. This means that the **NEW** Location is more predictable, yet not as optimal.
+```{r}
+layout(matrix(c(1,2),nr=1,nc=2))# 1 row 3 cols
+boxplot(voltage,main="NEW",ylab="VOLTAGE",col="Blue",notch=TRUE)
+boxplot(voltage_old,main="OLD",ylab="VOLTAGE",col="Blue",notch=TRUE)
+```
+
+
+# Question 12
+The interval, calculated below, that contains $95\%$ of all the roughness measurments is: $(0.8331772,$ $2.9288228)$
+```{r}
+rough <- read.csv(file="ROUGHPIPE.csv")
+head(rough)
+```
+```{r}
+s_12 <- sd(rough$ROUGH)
+y_bar = mean(rough$ROUGH)
+interval = c(y_bar-2*s_12,y_bar+2*s_12 )
+interval
+```
+
+
+# Question 13
+```{r}
+gobiants <- read.csv(file = "GOBIANTS.csv")
+head(gobiants)
+```
+
+## a
+The results for the mean, median, and mode are: $12.81818$, $5$, and $5$ & $4$ respectively. The mean shows the most accurate central tendency. While the median shows the middle value within the data yet not necessarily the central tendency. while the mode shows the most frequent occurring data points; which would be $5$ & $4$ equally.
+```{r}
+# Mean
+mean(gobiants$AntSpecies)
+# Median
+median(gobiants$AntSpecies)
+# Mode
+find_mode(gobiants$AntSpecies)
+```
+
+
+## b
+In this case I would use the **Median** & **Mode** for the central tendency as they are both approximately $5$. This means that outliers may have skewed the mean.
+
+## c
+The results for the mean, median, and mode are: $40.4$, $40$, and $40$ respectively.
+```{r}
+Dry_Steppe <- with(gobiants, gobiants[Region=="Dry Steppe",])
+head(Dry_Steppe)
+```
+```{r}
+# Mean
+mean(Dry_Steppe$PlantCov)
+# Median
+median(Dry_Steppe$PlantCov)
+# Mode
+find_mode(Dry_Steppe$PlantCov)
+```
+
+
+## d
+The results for the mean, median, and mode are: $28$, $26$, and $30$ respectively.
+```{r}
+Gobi_Desert <- with(gobiants, gobiants[Region=="Gobi Desert",])
+head(Gobi_Desert)
+```
+```{r}
+# Mean
+mean(Gobi_Desert$PlantCov)
+# Median
+median(Gobi_Desert$PlantCov)
+# Mode
+find_mode(Gobi_Desert$PlantCov)
+```
+
+## e
+
+Yes the regions had a different plant coverage percentage distribution. The central tendency for the **Dry Steppe** was approximately $40$ which was confirmed by the mean median and mode. While the central tendency for the **Gobi Desert** was near $28$ given by the mean. 
+
+
+# Question 14
+```{r}
+galaxy <- read.csv(file = "GALAXY2.csv")
+head(galaxy)
+```
+
+## a
+
+The following boxplot describes the velocity distribution of the galaxy cluster:
+```{r}
+boxplot(galaxy$VELOCITY,main="A1775",ylab="Velocities",col="Blue",notch=FALSE)
+```
+
+
+## b
+Yes, as there seems to be two distinct velocities, one under $22,000$ km and one above.
+
+## c
+From the following calcuationscluster A1775A and it's velocity will be described by the **mean**; while A1775B's velocity is described by the **median**.
+
+The **mean** of the velocities is:
+```{r}
+mean(galaxy$VELOCITY)
+```
+The **median** of the velocities is:
+```{r}
+median(galaxy$VELOCITY)
+```
+The **standard deviation** of the velocities is:
+```{r}
+sd(galaxy$VELOCITY)
+```
+
+
+## d
+A velocity of $20,000$ km/s would be the cluster A1775A, as it is closer to the **mean** of $21,448.25$ km/s which describes cluster A1775A as compared to the **median** of $22,355$ km/s that describes the cluster A1775B.
+
+
+
+
+# Question 15
+```{r}
+Plot_15 <- ggplot(ddt, aes(x=RIVER, y=LENGTH, fill=SPECIES)) + geom_boxplot() + ggtitle("Evan Blosser")
+Plot_15 + labs(caption = "Figure 1: Question 15 plot")
+
+```
+
