@@ -1,0 +1,395 @@
+---
+title: 'Lab 8'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Task 1
+```{r}
+getwd()
+```
+## Note:
+
+See **mylab8.R** for all code comments
+
+# Task 2
+
+## Uniform Distribution
+```{r}
+uniform <- data.frame(runif(10,0,5))
+uniform
+```
+
+## Mean and Variance
+Given the equations and $\alpha = 0$ and $\beta = 5$:
+
+$$
+\begin{align*}
+\mu =& \frac{\alpha+\beta }{2} = \frac{0+5}{2} =2.5\\
+\mu =& 2.5
+\\
+\sigma ^2 =&  \frac{ (\beta -\alpha )^2}{12} = \frac{ (5 -0 )^2}{12} = 2.083333\\
+\sigma ^2 =& 2.0833
+\end{align*}
+$$
+
+The mean is $\mu = 2.5$ and the variance is $\sigma ^2 = 2.0833$.
+
+## $\bar{X}$ and $S^2$ using sample:
+
+```{r}
+mean(uniform$runif.10..0..5.)
+```
+
+$\bar{X}=2.952524$
+
+```{r}
+sd(uniform$runif.10..0..5.)^2
+```
+$S^2=2.832483$
+
+Compared to the population the mean is only off by $0.4$ with the standard deviation has a more significant increase in the sample versus the population.
+
+## sum $T$ & $\bar{Y}$ 
+$$
+\begin{align*}
+E(T) =& nE(Y_i)\\
+\\ 
+\&
+\\
+\\
+V(\bar{Y}) =& \frac{V(Y_i)}{n}
+\end{align*}
+$$
+
+
+## myclt()
+
+
+```{r}
+myclt=function(n,iter){
+  y=runif(n*iter,0,5) # A
+  data=matrix(y,nr=n,nc=iter,byrow=TRUE) # B
+  sm=apply(data,2,sum) # C
+  hist(sm)
+  sm
+}
+```
+
+
+### Line A
+Line **A** assigns the object *y* to the output of *runif()* with the settings of $n*iter$ as the number of observations, 0 as the minimum, and 5 as the maximum.
+
+### Line B
+Line **B** sets the object *y* to fill the matrix *data* with $n$ rows and $iter$ columns.
+
+### Line C
+Line **C** uses *apply()* to use the function *sum* on the matrix *data* and sets it to and object *sm*
+
+### Line D
+Line **D** sets the output data of *sm* to an object *w*, that can be printed to or utilized by the user.
+
+
+## Plot 
+```{r}
+w=myclt(n=10,iter=10000) # D
+```
+
+
+## Utilizing object *w*
+The mean of *w* is $\bar{w} = 24.93929$, and the variance is $S_w^2 = 21.03339$.
+```{r}
+mean(w)
+var(w)
+```
+
+
+## Changing myclt()
+```{r}
+myclt=function(n,iter){
+  y=runif(n*iter,0,5) 
+  data=matrix(y,nr=n,nc=iter,byrow=TRUE) 
+  ## Changes ################################
+  # Apply the mean function to the data matrix
+  mean=apply(data,2,mean)
+  # Plot a density histogram
+  hist(mean, freq = FALSE)
+  # Print the mean 
+  mean
+}
+```
+
+
+## Plotting change myclt() and Utilizing object *w*
+
+The mean of *w* is $\bar{w} = 2.499269$, and the variance is $S_w^2 = 0.2083659$.
+```{r}
+w=myclt(n=10,iter=10000)
+mean(w)
+var(w)
+```
+
+
+# Task 3
+
+## mycltu()
+```{r}
+################### uniform ##########################
+### CLT uniform 
+## my Central Limit Function
+## Notice that I have assigned default values which can be changed when the function is called
+mycltu=function(n,iter,a=0,b=10){
+## r-random sample from the uniform
+y=runif(n*iter,a,b)
+## Place these numbers into a matrix
+## The columns will correspond to the iteration and the rows will equal the sample size n
+data=matrix(y,nr=n,nc=iter,byrow=TRUE)
+## apply the function mean to the columns (2) of the matrix
+## these are placed in a vector w
+w=apply(data,2,mean)
+## We will make a histogram of the values in w
+## How high should we make y axis?
+## All the values used to make a histogram are placed in param (nothing is plotted yet)
+param=hist(w,plot=FALSE)
+## Since the histogram will be a density plot we will find the max density
+ymax=max(param$density)
+## To be on the safe side we will add 10% more to this
+ymax=1.1*ymax
+## Now we can make the histogram
+hist(w,freq=FALSE,  ylim=c(0,ymax), main=paste("Histogram of sample mean",
+"\n", "sample size= ",n,sep=""),xlab="Sample mean")
+## add a density curve made from the sample distribution
+lines(density(w),col="Blue",lwd=3) # add a density plot
+## Add a theoretical normal curve 
+curve(dnorm(x,mean=(a+b)/2,sd=(b-a)/(sqrt(12*n))),add=TRUE,col="Red",lty=2,lwd=3) # add a theoretical curve
+## Add the density from which the samples were taken
+curve(dunif(x,a,b),add=TRUE,lwd=4)
+}
+```
+
+
+##	w=apply(data,2,mean), how does the apply function use the 2?
+The *apply()* function uses the *2* as a MARGIN, indicating we want to select columns as the target of *mean*.
+
+## How many terms are in w, when mycltu(n=20,iter=100000) is called?
+there are $101$ X & Y terms.
+
+
+## curve(dnorm(x,mean=(a+b)/2,
+This defines a theoretical curve using *dnorm()*, meaning that it is **Normal**, and the mean is as defined in **Task 2** for a uniform distribution.
+
+
+## sd=(b-a)/(sqrt(12*n))),add=TRUE,col="Red",lty=2,lwd=3): 
+This is the standard deviation for the *dnorm()* curve as in **Task 2**; however, as that was the variance, and the standard deviation is needed th formula takes on the following form for $n$ sample size:
+
+$$
+\begin{align*}
+\frac{b-a}{\sqrt{12*n}}
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\hspace{2.5mm} NOT \hspace{2.5mm} \frac{(b-a)^2}{12}
+\end{align*}
+$$
+
+
+## Plots for $n= 1,2,3,5,10,30$ 
+```{r}
+w = mycltu(n=1,iter=10000,a = 0,b = 10)
+w = mycltu(n=2,iter=10000,a = 0,b = 10)
+w = mycltu(n=3,iter=10000,a = 0,b = 10)
+w = mycltu(n=5,iter=10000,a = 0,b = 10)
+w = mycltu(n=10,iter=10000,a = 0,b = 10)
+w = mycltu(n=30,iter=10000,a = 0,b = 10)
+```
+
+## Conclusion
+After examining the plots above it would seem like a size of $n=5$ gives the most even or *uniform* distribution considering a bell curve. When $n=1$ the values all have an identical mean, and for $n=30$ the mean is centered around 5 with a propability density above $0.6$. 
+
+
+
+# Task 4
+
+## mycltb()
+```{r}
+##############################  Binomial #########
+## CLT Binomial
+## CLT will work with discrete or continuous distributions 
+## my Central Limit Function
+## Notice that I have assigned default values which can be changed when the function is called
+mycltb=function(n,iter,p=0.5,...){
+  ## r-random sample from the Binomial
+  y=rbinom(n*iter,size=n,prob=p)
+  ## Place these numbers into a matrix
+  ## The columns will correspond to the iteration and the rows will equal the sample size n
+  data=matrix(y,nr=n,nc=iter,byrow=TRUE)
+  ## apply the function mean to the columns (2) of the matrix
+  ## these are placed in a vector w
+  w=apply(data,2,mean)
+  ## We will make a histogram of the values in w
+  ## How high should we make y axis?
+  ## All the values used to make a histogram are placed in param (nothing is plotted yet)
+  param=hist(w,plot=FALSE)
+  ## Since the histogram will be a density plot we will find the max density
+  
+  ymax=max(param$density)
+  ## To be on the safe side we will add 10% more to this
+  ymax=1.1*ymax
+  
+  ## Now we can make the histogram
+  ## freq=FALSE means take a density
+  hist(w,freq=FALSE,  ylim=c(0,ymax),
+       main=paste("Histogram of sample mean","\n", "sample size= ",n,sep=""),
+       xlab="Sample mean",...)
+  ## add a density curve made from the sample distribution
+  #lines(density(w),col="Blue",lwd=3) # add a density plot
+  ## Add a theoretical normal curve 
+  curve(dnorm(x,mean=n*p,sd=sqrt(p*(1-p))),add=TRUE,col="Red",lty=2,lwd=3) 
+  
+}
+```
+
+
+## Plots for $n = 4,5,10,20$ 
+```{r}
+mycltb(n=4,iter=10000,p=0.3)
+mycltb(n=5,iter=10000,p=0.3)
+mycltb(n=10,iter=10000,p=0.3)
+mycltb(n=20,iter=10000,p=0.3)
+```
+
+
+
+
+## Plots for $n = 4,5,10,20$ & $p=0.7$
+```{r}
+mycltb(n=4,iter=10000,p=0.7)
+mycltb(n=5,iter=10000,p=0.7)
+mycltb(n=10,iter=10000,p=0.7)
+mycltb(n=20,iter=10000,p=0.7)
+```
+
+
+## Plots for $n = 4,5,10,20$ & $p=0.5$
+```{r}
+mycltb(n=4,iter=10000,p=0.5)
+mycltb(n=5,iter=10000,p=0.5)
+mycltb(n=10,iter=10000,p=0.5)
+mycltb(n=20,iter=10000,p=0.5)
+```
+
+
+## Conclusion
+The higher the sample size $n$ is the more uniform the distribution is, while the lower the number actually yields gaps such as in the graphs of $n=4$. The probability also has more of an effect on the distribution when the sample size is low. This can be seen in the graph for $n=4$ & $p=0.3$, the distribution skews to the left while the opposite occurs for $p=0.7$. The probability has little to no significant affect on the sample size $n=20$; thus, it can be concluded that the probability affects the binomial distribution for samples $n<20$.
+
+
+
+
+
+
+
+
+# Task 5
+
+
+
+## mycltp()
+```{r}
+####### Poisson ######################
+## CLT Poisson
+## CLT will work with discrete or continuous distributions 
+## my Central Limit Function
+## Notice that I have assigned default values which can be changed when the function is called
+mycltp=function(n,iter,lambda=10,...){
+  ## r-random sample from the Poisson
+  y=rpois(n*iter,lambda=lambda)
+  ## Place these numbers into a matrix
+  ## The columns will correspond to the iteration and the rows will equal the sample size n
+  data=matrix(y,nr=n,nc=iter,byrow=TRUE)
+  ## apply the function mean to the columns (2) of the matrix
+  ## these are placed in a vector w
+  w=apply(data,2,mean)
+  ## We will make a histogram of the values in w
+  ## How high should we make y axis?
+  ## All the values used to make a histogram are placed in param (nothing is plotted yet)
+  param=hist(w,plot=FALSE)
+  ## Since the histogram will be a density plot we will find the max density
+  ymax=max(param$density)
+  ## To be on the safe side we will add 10% more to this
+  ymax=1.1*ymax
+  ## Make a suitable layout for graphing
+  layout(matrix(c(1,1,2,3),nr=2,nc=2, byrow=TRUE))
+  ## Now we can make the histogram
+  hist(w,freq=FALSE,  ylim=c(0,ymax), col=rainbow(max(w)),
+       main=paste("Histogram of sample mean","\n", "sample size= ",n," iter=",iter," lambda=",lambda,sep=""),
+       xlab="Sample mean",...)
+  ## add a density curve made from the sample distribution
+  #lines(density(w),col="Blue",lwd=3) # add a density plot
+  ## Add a theoretical normal curve 
+  curve(dnorm(x,mean=lambda,sd=sqrt(lambda/n)),add=TRUE,col="Red",lty=2,lwd=3) # add a theoretical curve
+  # Now make a new plot
+  # Since y is discrete we should use a barplot
+  barplot(table(y)/(n*iter),col=rainbow(max(y)), main="Barplot of sampled y", ylab ="Rel. Freq",xlab="y" )
+  x=0:max(y)
+  plot(x,dpois(x,lambda=lambda),type="h",lwd=5,col=rainbow(max(y)),
+       main="Probability function for Poisson", ylab="Probability",xlab="y")
+}
+```
+
+
+
+## Plots for $n = 2,3,5,10,20$
+```{r}
+mycltp(n=2, iter=10000,lambda=4)
+mycltp(n=3, iter=10000,lambda=4)
+mycltp(n=5, iter=10000,lambda=4)
+mycltp(n=10, iter=10000,lambda=4)
+mycltp(n=20, iter=10000,lambda=4)
+```
+
+
+## Plots for $n = 2,3,5,10,20$ & $\lambda=10$
+```{r}
+mycltp(n=2, iter=10000,lambda=10)
+mycltp(n=3, iter=10000,lambda=10)
+mycltp(n=5, iter=10000,lambda=10)
+mycltp(n=10, iter=10000,lambda=10)
+mycltp(n=20, iter=10000,lambda=10)
+```
+
+## Video
+<video width="320" height="240" controls>
+  <source src="vid.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+
+
+
+
+# Task 6
+
+I chose the *mycltp()* function and created it using **Roxygen** for proper documentation. Below is an example of it running from my package *MATH4753EvanB*.
+
+```{r}
+MATH4753EvanB::mycltp(n=2, iter=10000,lambda=4)
+```
+
+

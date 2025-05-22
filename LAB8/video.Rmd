@@ -1,0 +1,30 @@
+---
+title: "video"
+author: "Dr Wayne Stewart"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Embedding video 
+
+Just include the appropriate html code into RMD and knit -- must be sent to browser!
+
+```
+<video width="320" height="240" controls>
+  <source src="vid.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+```
+
+<center>
+
+<video width="320" height="240" controls>
+  <source src="vid.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+<\center>
+
