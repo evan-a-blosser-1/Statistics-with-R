@@ -1,0 +1,66 @@
+---
+title: 'Lab 10'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Excersise
+
+## A
+```{r}
+ddt <- MATH4753EvanB::ddt
+with(ddt,boxplot(LENGTH~SPECIES,ylab="LENGTH",col=rainbow(3)))
+```
+
+
+
+## B
+```{r}
+library(dplyr)
+ddt2 <- mutate(ddt, SPECIES2 = recode(SPECIES, LMBASS = "BASSBUFF", SMBUFFALO = "BASSBUFF"))
+ddt2
+```
+
+
+
+
+## C
+```{r}
+with(ddt2,boxplot(LENGTH~SPECIES2,ylab="LENGTH",col=rainbow(2), main="Evan Blosser"))
+```
+
+
+
+## D
+```{r}
+ddt2 <- ddt %>%mutate(ddt, SPECIES2 = recode(SPECIES, LMBASS = "BASSBUFF", SMBUFFALO = "BASSBUFF")) %>% mutate(SPECIES2 =factor(SPECIES2, levels = c("BASSBUFF","CCATFISH")))
+
+ddt2
+```
+
+
+
+## E
+
+```{r}
+with(ddt2, var.test(LENGTH~SPECIES2))
+
+
+with(ddt2, t.test(LENGTH~SPECIES2,mu=0,var.equal=FALSE))
+```
+

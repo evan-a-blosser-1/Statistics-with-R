@@ -1,0 +1,35 @@
+---
+title: 'Title'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questions{0/17}
+
+## Q 1{.tabset}
+
+### a
+
+
+### b
+
+
+
+## Q 2{.tabset}
+```{r}
+plot(1:10)
+```
+

@@ -1,0 +1,90 @@
+---
+title: "Quiz"
+author: "Evan_Blosser"
+date: "2023-07-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Quiz
+```{r}
+mtbe <- read.csv(file = "MTBE.csv")
+m_tab <- with(mtbe, table(WellClass, `MTBE.Detect`))
+addmargins(m_tab)
+```
+
+
+
+
+
+
+```{r}
+ddt <- read.csv(file = "DDT.csv")
+head(ddt)
+```
+
+
+```{r}
+Dry_Steppe <- with(gobiants, gobiants[Region=="Dry Steppe",])
+
+RiversTab=with(ddt,table(RIVER)) 
+```
+
+
+
+
+# Task 3
+```{r}
+weight <- ddt$WEIGHT
+weight
+z <- (weight-mean(weight))/sd(weight)
+z
+```
+
+
+```{r}
+which.min(ddt$WEIGHt)
+```
+
+
+```{r}
+mean(weight)
+```
+
+As shown below the mean of **z** was calculated to be approximately 0 (1.058709e-16); while the square root of the standard deviation of **z** was calculated to be 1:
+
+```{r}
+mean(z)
+sd(z)
+```
+```{r}
+# Find the z values greater than 3 in size
+z[abs(z)>3]
+
+# Find the I values corresponding to these z values
+weight[abs(z)>3]
+
+# Find the values of z that are possible outliers
+z[abs(z)>=2 & abs(z)<=3]
+
+#Find the values of I which are possible outliers
+weight[abs(z)>=2 & abs(z)<=3]
+ 
+ 
+
+# Plot the outliers in red and the possible outliers in blue
+mycol = ifelse(abs(z)>3, "Red",
+        ifelse(abs(z)>=2 &abs(z)<=3,"Blue", "Black"))  
+
+#Plot points with different plotting shapes        
+mypch = ifelse(abs(z)>3, 20,
+        ifelse(abs(z)>=2 &abs(z)<=3,21, 22))
+library(lattice)
+dotplot(weight,col=mycol)
+```
+
+
+

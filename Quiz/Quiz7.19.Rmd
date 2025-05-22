@@ -1,0 +1,24 @@
+---
+title: "Untitled"
+author: "Evan_A_Blosser"
+date: "2023-07-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+pnorm(20,20,6)
+```
+```{r}
+pnorm(q = 16,mean = 12,sd = 7)-pnorm(q = 10,mean = 12,sd = 7)
+
+pbinom(6,10,0.6)-pbinom(2,10,0.6)
+
+1- pbinom(15,20,0.55)
+
+1-pnorm(q = 16.2,mean = 14.56,sd = 10)
+```
+

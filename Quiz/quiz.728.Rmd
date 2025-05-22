@@ -1,0 +1,9 @@
+```{r}
+library(s20x)
+data("camplake.df")
+head(camplake.df)
+plot(Length ~ Scale.Radius, data = camplake.df)
+y.lm = lm(Length ~ Scale.Radius, data = camplake.df)
+summary(y.lm)
+normcheck(y.lm, shapiro.wilk = TRUE)
+```
