@@ -1,0 +1,146 @@
+---
+title: 'Exam'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+  <- read.csv(".csv")
+
+class()
+summary()
+
+#  ddt %>% filter(LENGTH > 50 & SPECIES == "CCATFISH")
+
+
+```
+
+```{r}
+ddtnew <- ddt %>% mutate(Z = (DDT-mean(DDT))/sd(DDT))
+head(ddtnew)
+```
+
+
+```{r}
+tab <- with(ddt,table(SPECIES,RIVER))
+addmargins(tab)
+```
+
+
+
+```{r}
+mpg <- EPAGAS$MPG
+mpg
+z <- (mpg-mean(mpg))/sd(mpg)
+mean(z)
+sd(z)^2
+# Find the z values greater than 3 in size
+z[abs(z)>3]
+
+# Find the I values corresponding to these z values
+mpg[abs(z)>3]
+
+# Find the values of z that are possible outliers
+z[abs(z)>=2 & abs(z)<=3]
+
+#Find the values of I which are possible outliers
+mpg[abs(z)>=2 & abs(z)<=3]
+
+boxplot(mpg,main="Miles Per Gallon: Task 4 Outlier identification",ylab="mpg",col="Blue",notch=TRUE)
+```
+
+
+
+
+
+```{r}
+epagas <- read.csv("EPAGAS.csv")
+mpg <- epagas$MPG
+
+z <- (mpg-mean(mpg))/sd(mpg)
+mean(z)
+sd(z)^2
+# Find the z values greater than 3 in size
+z[abs(z)>3]
+
+# Find the I values corresponding to these z values
+mpg[abs(z)>3]
+
+# Find the values of z that are possible outliers
+z[abs(z)>=2 & abs(z)<=3]
+
+#Find the values of I which are possible outliers
+mpg[abs(z)>=2 & abs(z)<=3]
+
+boxplot(mpg,main="Miles Per Gallon: Task 4 Outlier identification",ylab="mpg",col="Blue",notch=TRUE)
+
+z.score(mpg)
+```
+```{r}
+z.score(mpg)
+```
+
+
+```{r}
+length(mpg[abs(z)<3])/length(mpg)
+
+length(mpg[abs(z)<1])/length(mpg)
+summary(mpg[abs(z)<1])
+```
+
+
+
+
+```{r}
+
+# assign to table from dataframe
+q8a.prob<-as.table(rbind(c(1/7,2/7,1/7),c(0,0,2/7),c(0,0,1/7)))
+row.names(q8a.prob) <- c("y1","y2","y3")
+colnames (q8a.prob) <- c("x1","x2","x3")
+# display
+q8a.prob
+
+addmargins(q8a.prob)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,86 @@
+---
+title: "class.7.24"
+author: "Evan_A_Blosser"
+date: "2023-07-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r}
+set.seed(32)
+y1 <- rnorm(3,15,8)
+y2 <- rnorm(40,10,8)
+
+# Sets: mu1 - mu2 = 0 
+t.test(y1,y2,mu = 0,var.equal=TRUE)
+# Or specific quantity with '$'
+t.test(y1,y2,mu = 0,var.equal=TRUE)$conf.int
+
+# F test: see that var.equal=TRUE is a correct assumption
+#  - packages the confidence interval
+var.test(y1,y2)
+
+
+# T value for confidence level (another way)
+t.test(y1)$conf.int
+
+
+# using R as  calcualator
+alpha <- 0.05
+n <- length(y1)
+t <- qt(1-alpha/2,n-1)
+mp <- c(-1,1)
+
+mean(y1) + mp*t*sd(y1)/sqrt(n)
+
+```
+
+
+
+```{r}
+y1 <- rnorm(3,4,5)
+
+# T value for confidence level (another way)
+t.test(y1)$conf.int
+
+
+# using R as  calcualator
+alpha <- 0.05
+n <- length(y1)
+t <- qt(1-alpha/2,n-1)
+mp <- c(-1,1)
+
+mean(y1) + mp*t*sd(y1)/sqrt(n)
+
+```
+
+```{r}
+ read.csv(file.choose())-> data
+data$REAC.R
+t.test(data$REAC.R,data$REAC.U)$conf
+
+# using R as  calcualator
+t.test(data$REAC.R,data$REAC.U,mu = 0,var.equal=TRUE)$conf.int
+
+
+read.csv(file.choose())-> data
+data$REAC.R
+t.test(data$REAC.R,data$REAC.U, paired = FALSE)$conf
+```
+
+```{r}
+library(dplyr)
+
+read.csv(file.choose())-> data
+data %>% mutate(difference = REAC.R-REAC.U) -> data2
+t.test(data2$difference)$conf
+
+t.test(data$REAC.R,data$REAC.U, paired =TRUE)$conf
+```
+

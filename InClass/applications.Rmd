@@ -1,0 +1,142 @@
+---
+title: 'Module16: Applications'
+author: "Dr. Wayne Stewart"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introductions
+
+We have covered a lot of ground and it will be salutary for us to look at some applications and examples of some of the more interesting theory we have covered.
+
+# The 32nd order statistic
+
+The following was taken from Larsen and Marx Example 3.10.5.
+
+The theory used relates to the $ith$ order statistic.
+
+$$f_{Y_i^{'}(y)} = \frac{n!}{(i-1)!(n-i)!}[F_Y(y)]^{i-1}[1-F_Y(y)]^{n-1}f_Y(y)$$
+for $1\le i \le n$
+
+
+## Nile river
+
+Engineers wish to build a levee on the banks of a river in Egypt which has an annual maximum tide level $Y$ in feet governed by the pdf  
+
+$$f_Y(y) = \frac{1}{20},\; 20<y<40$$
+The engineers wish to build the levee to a height $h$ so that there is only a 0.30 chance that the second worst flood in the next 33 years will overflow the embankment.
+
+
+Suppose the flood tides are $Y_1, Y_2, \ldots, Y_{33}$ for the next 33 years.
+
+We need $h$ so that $P(Y_{32}^{'} > h ) = 0.30$
+
+The book calculates the density using the above formula and then creates the integral needed to solve the probability equation above.
+
+However the book does not show any methodology for solving the resulting 33rd order equation. 
+
+I have done so below.
+
+
+
+
+
+
+```{r}
+# minimize the following objective function
+obj <- function(x){
+  
+  abs(1-33*(x/20-1)^32 + 32*(x/20-1)^33 - 0.3)
+  
+}
+
+optimize(f = obj, interval = c(20,40))
+
+```
+
+
+
+# Sum of Random Variables
+
+## Introduction
+
+This problem will remind you of some important techniques of distributional theory including MGFs and Bivariate random variables.
+
+## Problem
+
+If $Z = X + Y$ and $f(x) = e^{-x},\; x>0$, $f(y) = e^{-y},\; y>0$ 
+
+### Proof a
+
+Using MGF's prove that $Z \sim Gamma(\alpha = 2, \beta = 1)$
+
+#### Solution
+
+$M_X(t) = (1-t)^{-1}$ and $M_Y(t) = (1-t)^{-1}$ since both X and Y are exponential densities.
+
+Therefore, $M_Z(t) = M_X(t)M_Y(t) = (1-t)^{-2}$ this is the MGF of a gamma $(1-\beta t)^{-\alpha}$ 
+
+$\therefore$ $Z \sim Gamma(\alpha = 2, \beta = 1)$
+
+
+### Proof b
+
+Using Bivariate distributional theory and techniques (set up integral) prove that the density of $Z$ is a $Gamma(\alpha = 2, \beta = 1)$
+
+
+#### Solution
+
+What we need to do is find the cumulative distributional function $F_Z(z)$ then differentiate to find the density.
+
+$$f_Z(z) = \frac{dF_Z(z)}{dz}$$
+
+Hopefully this will be the Gamma we desire!
+
+We will start with $F_Z(z)$
+
+$$F_Z(z) = P(Z \le z) = P(X + Y \le z) = P(Y \le z - X)$$
+
+$$\begin{eqnarray}F_Z(z) &=& \int_{x = 0}^{x = z}\int_{y = 0}^{z-x}e^{-x} e^{-y} dy dx\\
+&=& \int_{x = 0}^{x = z}e^{-x}\int_{y = 0}^{z-x}e^{-y} dy dx\\
+&=& \int_{x = 0}^{x = z}e^{-x}\left[-e^{-y} \right]_0^{z-x} dx\\
+&=&\int_{x = 0}^{x = z}e^{-x}(1-e^{x-z})dx\\
+&=&\int_{x = 0}^{x = z}e^{-x} - e^{-z} dx\\
+&=& \left[ -e^{-x} -xe^{-z}\right]_0^z\\
+&=& -e^{-z}-ze^{-z} + 1
+\end{eqnarray}$$
+
+
+
+Now find the density:
+
+$$\begin{eqnarray}f_Z(z) &=& \frac{dF_Z(z)}{dz}\\
+&=& \frac{d (-e^{-z}-ze^{-z} + 1)}{dz}\\
+&=& e^{-z} -e^{-z} +ze^{-z}\\
+&=& ze^{-z}\\
+f(y)&=& \frac{y^{\alpha-1}e^{-y/\beta}}{\beta^\alpha \Gamma(\alpha)},\; Gamma\; Density\; \mu = \alpha\beta,\; \sigma^2 = \alpha\beta^2
+\end{eqnarray}$$
+
+```{r,fig.align='center'}
+dg <- function(x) {
+  x*exp(-x)
+}
+
+curve(expr = dg, 
+      xlim = c(0, 2 +3*sqrt(2)), # 0,mu + 3 sigma
+      main = "alpha = 2, beta = 1", 
+      ylab = "Gamma density",
+      xlab = "z")
+
+```
+
+
+
+So $Z\sim Gamma(\alpha = 2, \beta = 1)$. Note that:
+$$f(z) = \frac{z^{2-1}e^{-z/1}}{1^2\Gamma(2)} = ze^{-z}$$

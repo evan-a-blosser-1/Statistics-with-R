@@ -1,0 +1,63 @@
+---
+title: 'Null Hypothesis'
+author: "Evan Blosser"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# NV = 1/2
+
+prob <- dbinom(0:10,10,1/2)
+names(prob) <- 0:10
+barplot(prob)
+```
+```{r}
+library(Intro2R)
+ddt
+L<-ddt$LENGTH
+summary(L)
+t.test(L,mu=40)
+# if t in interval then accept null, if not then reject
+t <- qt(1-0.05/2,143)
+t
+```
+
+# P value and T calc
+
+```{r}
+t.test(L,mu=42)
+```
+```{r}
+t.test(L,mu=45)
+```
+# T calc more...
+```{r}
+set.seed(34)
+y1 <- rnorm(40,21,10)
+y2 <- rnorm(40,18,10)
+
+t.test(y1,y2, mu=0, var.equal = TRUE)
+
+qt(1-0.05/2, 68)
+```
+
+
+```{r}
+
+```
+
+

@@ -1,0 +1,30 @@
+---
+title: "In Class"
+author: "Evan_A_Blosser"
+date: "2023-07-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+dbinom(8,10,0.6)
+```
+
+```{r}
+pbinom(q = 4,size = 10,prob = .6)
+```
+
+```{r}
+z <- (weight-mean(weight))/sd(weight)
+```
+
+```{r}
+x <- (-2*4)/6
+x
+```
+
