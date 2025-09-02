@@ -13,7 +13,7 @@ This delved into handling collected data for various species of river fish, Eart
 
 
 ## Assignment 2  
-Permutations Rule, PArtitions Rule, Combinations Rule, etc...
+Permutations Rule, Partitions Rule, Combinations Rule, etc...
 ![image](https://github.com/user-attachments/assets/f3ddd9dd-5ddb-41a7-b4fa-e76d4b9681c2)
 
 
@@ -39,3 +39,4 @@ Bootstrap sampling:
 
 # Project: Objective function for approximating the number of tickets sold
 ![image](https://github.com/user-attachments/assets/9b09f5fa-a2f1-448f-848c-0a0a8371e580)
+
